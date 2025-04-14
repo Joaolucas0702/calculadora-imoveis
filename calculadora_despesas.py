@@ -18,7 +18,20 @@ def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa
         itbi = itbi_entrada + itbi_financiado
 
     elif cidade == "Senador Canedo":
-        itbi = entrada * 0.015 + valor_financiado * 0.005
+        # Definir alíquota com base no valor financiado
+        if valor_financiado <= 500000:
+            aliquota_financiado = 0.005
+        elif valor_financiado <= 1000000:
+            aliquota_financiado = 0.01
+        elif valor_financiado <= 1500000:
+            aliquota_financiado = 0.015
+        else:
+            aliquota_financiado = 0.02
+
+        itbi_financiado = valor_financiado * aliquota_financiado
+        itbi_entrada = entrada * 0.02
+
+        itbi = itbi_entrada + itbi_financiado
         taxa_expediente = 8.50
 
     elif cidade == "Trindade":
@@ -34,6 +47,7 @@ def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa
         taxa_expediente = 0
 
     return itbi + taxa_expediente
+
 
 
 def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=False):

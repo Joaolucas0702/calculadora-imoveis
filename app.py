@@ -150,8 +150,32 @@ Esse valor refere-se ao registro do contrato de financiamento.
 """
 
         st.markdown(texto)
-        texto_whatsapp = texto.replace("**", "").replace("*", "")
-        botao_whatsapp(texto_whatsapp)
+         # Botão estilizado para copiar o resultado
+        copy_code = f"""
+        <style>
+        .copiar-btn {{
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }}
+        .copiar-btn:hover {{
+            background-color: #45a049;
+        }}
+        </style>
+
+        <textarea id="textoResultado" style="display:none;">{texto}</textarea>
+        <button class="copiar-btn" onclick="navigator.clipboard.writeText(document.getElementById('textoResultado').value)">📋 Copiar para a área de transferência</button>
+        """
+        st.components.v1.html(copy_code, height=80)
 
     except Exception as e:
         st.error(f"Erro ao calcular: {e}")

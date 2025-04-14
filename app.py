@@ -35,8 +35,11 @@ if st.button("Calcular"):
 *Dados do Imóvel e Financiamento*
 
 * Valor de Compra e Venda: R$ {valor_imovel:,.2f}
+
 * Valor Financiado: R$ {valor_financiado:,.2f}
+
 * Valor de Entrada: R$ {resultado['Entrada']:,.2f}
+
 * Tipo de Financiamento: {tipo_financiamento}
 
 *Despesas Relacionadas à Compra do Imóvel*
@@ -45,11 +48,17 @@ if st.button("Calcular"):
 Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento. 
 
 2️⃣ *ITBI – Prefeitura – R$ {resultado['ITBI']:,.2f}*
-O Imposto sobre Transmissão de Bens Imóveis (ITBI) pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal
+O Imposto sobre Transmissão de Bens Imóveis (ITBI) pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
+
+*Sobre o valor do imóvel: (__% sobre R$ _____) = R$ _____*
+
+*Sobre o valor financiado: (__% sobre R$ _____) = R$ _____*
+
+*Taxa de Expediente da avaliação do ITBI (se aplicável): R$ ___*
 
 *Total estimado do ITBI: R$ {resultado['ITBI']:,.2f}*
 
-3️⃣ *Cartório de Registro de Imóveis – R$ {resultado['Registro']:,.2f}*
+3️⃣ *Cartório de Registro de Imóveis – R$ {resultado['Registro']:,.2f}* 
 Esse valor refere-se ao registro do contrato de financiamento, obrigatório para garantir a legalidade da compra e a segurança jurídica do comprador.
 
 ✅ *Desconto de 50% aplicado? {'(X) Sim' if primeiro_imovel else '( ) Não'}*
@@ -67,7 +76,9 @@ A Suporte Soluções Imobiliárias não é responsável pelo cálculo oficial da
 
 Para obter informações precisas e realizar os pagamentos, recomenda-se entrar em contato com os órgãos responsáveis, como Prefeitura e o Cartório de Registro de Imóveis.
 """
+
         st.text_area("Resultado do Cálculo:", value=texto, height=600)
 
     except Exception as e:
         st.error(f"Erro ao calcular: {e}")
+

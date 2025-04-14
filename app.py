@@ -115,7 +115,7 @@ if st.button("Calcular"):
             taxa_exp = 4.50
 
             itbi_detalhe = f"""
-- Sobre a entrada: (2% sobre R\$ {moeda(entrada)}) = R\$ {moeda(itbi_entrada)}  
+- Sobre o valor da entrada: (2% sobre R\$ {moeda(entrada)}) = R\$ {moeda(itbi_entrada)}  
 - Sobre o valor financiado: ({aliquota_financiado * 100:.1f}% sobre R\$ {moeda(valor_financiado)}) = R\$ {moeda(itbi_financiado)}  
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(taxa_exp)}  
 - **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}

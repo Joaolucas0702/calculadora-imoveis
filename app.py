@@ -14,9 +14,16 @@ st.header("Preencha os dados abaixo:")
 
 col1, col2 = st.columns(2)
 with col1:
-    valor_imovel = st.number_input("Valor do Imóvel (R$)", min_value=0.0, value=500000.0)
-    valor_financiado = st.number_input("Valor Financiado (R$)", min_value=0.0, value=300000.0)
-    seguro = st.number_input("Seguro (verificar na simulação)", min_value=0.0, value=220.0)
+    valor_imovel = st.number_input(
+        "Valor do Imóvel (R$)", min_value=0.0, value=0.0, step=1000.0, format="%.2f"
+    )
+    valor_financiado = st.number_input(
+        "Valor Financiado (R$)", min_value=0.0, value=0.0, step=1000.0, format="%.2f"
+    )
+    seguro = st.number_input(
+        "Seguro (verificar na simulação)", min_value=0.0, value=0.0, step=10.0, format="%.2f"
+    )
+
 
 with col2:
     tipo_financiamento = st.selectbox("Tipo de Financiamento", ["SBPE", "Minha Casa Minha Vida", "Pro Cotista"])

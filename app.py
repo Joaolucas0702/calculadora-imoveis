@@ -1,13 +1,13 @@
 import streamlit as st
 from calculadora import CalculadoraDespesasImoveis
 import urllib.parse
-from pathlib import Path
 
 st.set_page_config(page_title="Calculadora de Despesas de Imóveis", layout="centered")
 st.title("🏠 Calculadora de Despesas de Imóveis")
 
 calculadora = CalculadoraDespesasImoveis()
 
+# 🔢 Funções auxiliares
 def converter_para_float(valor_str):
     try:
         return float(valor_str.replace(".", "").replace(",", "."))
@@ -35,6 +35,7 @@ def botao_whatsapp(mensagem):
     html_link = f'<a href="{link}" target="_blank">📲 Compartilhar no WhatsApp</a>'
     st.markdown(html_link, unsafe_allow_html=True)
 
+# Formulário
 st.header("Preencha os dados abaixo:")
 
 col1, col2 = st.columns(2)
@@ -74,33 +75,87 @@ if st.button("Calcular"):
 
         entrada = valor_imovel - valor_financiado
 
-        markdown_data = {
-            "valor_imovel": moeda(valor_imovel),
-            "valor_financiado": moeda(valor_financiado),
-            "entrada": moeda(entrada),
-            "tipo": tipo_financiamento,
-            "lavratura": moeda(resultado.get("Lavratura", 0.0)),
-            "itbi_total": moeda(resultado.get("ITBI", 0.0)),
-            "aliq_imovel": "2",
-            "base_imovel": moeda(valor_imovel),
-            "valor_itbi_imovel": moeda(valor_imovel * 0.02),
-            "aliq_financiado": "0",
-            "base_financiado": moeda(0),
-            "valor_itbi_financiado": moeda(0),
-            "taxa_expediente": moeda(100),
-            "registro": moeda(resultado.get("Registro", 0.0)),
-            "desconto": "(X) Sim" if primeiro_imovel else "( ) Não",
-            "total": moeda(resultado.get("Total Despesas", 0.0)),
-        }
+        if cidade == "Aparecida de Goiânia":
+            itbi_entrada = entrada * 0.025
+            if renda_bruta <= 4400:
+                aliq = 0.5
+            elif renda_bruta <= 8000:
+                aliq = 1
+            else:
+                aliq = 1.5
+            itbi_fin = valor_financiado * (aliq / 100)
+            taxa_exp = 30.00
+            itbi_detalhe = f"""
+Sobre o valor da entrada: (2,5% sobre R$ {moeda(entrada)}) = {moeda(itbi_entrada)}
+Sobre o valor financiado: ({aliq}% sobre R$ {moeda(valor_financiado)}) = {moeda(itbi_fin)}
+Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(taxa_exp)}
+Total estimado do ITBI: R$ {moeda(resultado['ITBI'])}
+"""
+        elif cidade == "Senador Canedo":
+            itbi_detalhe = f"""
+Sobre o valor do imóvel: (1,5% sobre R$ {moeda(entrada)}) = {moeda(entrada * 0.015)}
+Sobre o valor financiado: (0,5% sobre R$ {moeda(valor_financiado)}) = {moeda(valor_financiado * 0.005)}
+Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(8.50)}
+Total estimado do ITBI: R$ {moeda(resultado['ITBI'])}
+"""
+        elif cidade == "Trindade":
+            base = valor_imovel * 0.02
+            itbi_detalhe = f"""
+Sobre o valor do imóvel: (2% sobre R$ {moeda(valor_imovel)}) = {moeda(base)}
+Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(4.50)}
+Total estimado do ITBI: R$ {moeda(resultado['ITBI'])}
+"""
+        elif cidade == "Goiânia":
+            base = valor_imovel * 0.02
+            itbi_detalhe = f"""
+Sobre o valor do imóvel: (2% sobre R$ {moeda(valor_imovel)}) = {moeda(base)}
+Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(100)}
+Total estimado do ITBI: R$ {moeda(resultado['ITBI'])}
+"""
+        else:
+            itbi_detalhe = "**Detalhamento indisponível para esta cidade.**"
 
-        template_markdown = Path("/mnt/data/texto_markdown.txt").read_text()
-        template_whatsapp = Path("/mnt/data/texto_whatsapp.txt").read_text()
+        texto = f"""
+### 🧾 CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO
 
-        texto_markdown = template_markdown.format(**markdown_data)
-        texto_whatsapp = template_whatsapp.format(**markdown_data)
+#### 🏡 Dados do Imóvel e Financiamento
 
-        st.markdown(texto_markdown)
+- **Valor de Compra e Venda:** {moeda(valor_imovel)}
+- **Valor Financiado:** {moeda(valor_financiado)}
+- **Valor de Entrada:** {moeda(entrada)}
+- **Tipo de Financiamento:** {tipo_financiamento}
+
+#### 💰 Despesas Relacionadas à Compra do Imóvel
+
+**1️⃣ Caixa Econômica Federal – {moeda(resultado['Lavratura'])}**  
+Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento. 
+
+**2️⃣ ITBI – Prefeitura – {moeda(resultado['ITBI'])}**  
+O ITBI pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
+
+{itbi_detalhe}
+
+**3️⃣ Cartório de Registro de Imóveis – {moeda(resultado['Registro'])}**  
+Esse valor refere-se ao registro do contrato de financiamento.
+
+✅ **Desconto de 50% aplicado?** {'Sim ✅' if primeiro_imovel else 'Não ❌'}
+
+💡 *Obs.: Se for o primeiro imóvel residencial financiado pelo SFH, pode haver um desconto de 50% na taxa de registro.*
+
+#### 💵 Total Geral das Despesas
+
+**Total estimado:** {moeda(resultado['Total Despesas'])}
+
+⚠️ *Este cálculo é apenas uma estimativa informativa. Para valores oficiais, consulte os órgãos competentes.*
+"""
+
+        st.markdown(texto)
+        texto_whatsapp = texto.replace("**", "").replace("*", "")
         botao_whatsapp(texto_whatsapp)
+
+    except Exception as e:
+        st.error(f"Erro ao calcular: {e}")
+
 
     except Exception as e:
         st.error(f"Erro ao calcular: {e}")

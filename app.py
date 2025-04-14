@@ -28,7 +28,7 @@ def formatar_moeda_input(valor_str):
     return f"{parte_int_formatada},{partes[1][:2].ljust(2,'0')}"
 
 def moeda(valor):
-    return f"R$ {valor:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
+    return f"{valor:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
 
 def remover_emojis(texto):
     return re.sub(r'[\U00010000-\U0010ffff\u2600-\u26FF\u2700-\u27BF]+', '', texto)
@@ -94,69 +94,68 @@ if st.button("Calcular"):
 - Sobre o valor da entrada: (2,5% sobre R$ {moeda(entrada)}) = R$ {moeda(itbi_entrada)}  
 - Sobre o valor financiado: ({aliq}% sobre R$ {moeda(valor_financiado)}) = R$ {moeda(itbi_fin)}  
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(taxa_exp)}  
-- **Total estimado do ITBI:** R$ {moeda(resultado['ITBI'])}
+- Total estimado do ITBI: R$ {moeda(resultado['ITBI'])}
 """
         elif cidade == "Senador Canedo":
             itbi_detalhe = f"""
 - Sobre o valor do imóvel: (1,5% sobre R$ {moeda(entrada)}) = R$ {moeda(entrada * 0.015)}  
 - Sobre o valor financiado: (0,5% sobre R$ {moeda(valor_financiado)}) = R$ {moeda(valor_financiado * 0.005)}  
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(8.50)}  
-- **Total estimado do ITBI:** R$ {moeda(resultado['ITBI'])}
+- Total estimado do ITBI: R$ {moeda(resultado['ITBI'])}
 """
         elif cidade == "Trindade":
             base = valor_imovel * 0.02
             itbi_detalhe = f"""
 - Sobre o valor do imóvel: (2% sobre R$ {moeda(valor_imovel)}) = R$ {moeda(base)}  
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(4.50)}  
-- **Total estimado do ITBI:** R$ {moeda(resultado['ITBI'])}
+- Total estimado do ITBI: R$ {moeda(resultado['ITBI'])}
 """
         elif cidade == "Goiânia":
             base = valor_imovel * 0.02
             itbi_detalhe = f"""
 - Sobre o valor do imóvel: (2% sobre R$ {moeda(valor_imovel)}) = R$ {moeda(base)}  
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(100)}  
-- **Total estimado do ITBI:** R$ {moeda(resultado['ITBI'])}
+- Total estimado do ITBI: R$ {moeda(resultado['ITBI'])}
 """
         else:
-            itbi_detalhe = "**Detalhamento indisponível para esta cidade.**"
+            itbi_detalhe = "Detalhamento indisponível para esta cidade."
 
         texto = f"""
-### 📟 CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO
+📟 CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO
 
-#### 🏡 Dados do Imóvel e Financiamento
+🏡 Dados do Imóvel e Financiamento
 
-- **Valor de Compra e Venda:** R$ {moeda(valor_imovel)}
-- **Valor Financiado:** R$ {moeda(valor_financiado)}
-- **Valor de Entrada:** R$ {moeda(entrada)}
-- **Tipo de Financiamento:** {tipo_financiamento}
+- Valor de Compra e Venda: R$ {moeda(valor_imovel)}
+- Valor Financiado: R$ {moeda(valor_financiado)}
+- Valor de Entrada: R$ {moeda(entrada)}
+- Tipo de Financiamento: {tipo_financiamento}
 
-#### 💰 Despesas Relacionadas à Compra do Imóvel
+💰 Despesas Relacionadas à Compra do Imóvel
 
-**1️⃣ Caixa Econômica Federal – R$ {moeda(resultado['Lavratura'])}**  
-Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento. 
+1️⃣ Caixa Econômica Federal – R$ {moeda(resultado['Lavratura'])}  
+Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento.
 
-**2️⃣ ITBI – Prefeitura – R$ {moeda(resultado['ITBI'])}**  
+2️⃣ ITBI – Prefeitura – R$ {moeda(resultado['ITBI'])}  
 O ITBI pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
 
 {itbi_detalhe}
 
-**3️⃣ Cartório de Registro de Imóveis – R$ {moeda(resultado['Registro'])}**  
+3️⃣ Cartório de Registro de Imóveis – R$ {moeda(resultado['Registro'])}  
 Esse valor refere-se ao registro do contrato de financiamento.
 
-✅ **Desconto de 50% aplicado?** {'Sim ✅' if primeiro_imovel else 'Não ❌'}
+✅ Desconto de 50% aplicado? {'Sim ✅' if primeiro_imovel else 'Não ❌'}
 
-💡 *Obs.: Se for o primeiro imóvel residencial financiado pelo SFH, pode haver um desconto de 50% na taxa de registro.*
+💡 Obs.: Se for o primeiro imóvel residencial financiado pelo SFH, pode haver um desconto de 50% na taxa de registro.
 
-#### 💵 Total Geral das Despesas
+💵 Total Geral das Despesas
 
-**Total estimado:** R$ {moeda(resultado['Total Despesas'])}
+Total estimado: R$ {moeda(resultado['Total Despesas'])}
 
-⚠️ *Este cálculo é apenas uma estimativa informativa. Para valores oficiais, consulte os órgãos competentes.*
+⚠️ Este cálculo é apenas uma estimativa informativa. Para valores oficiais, consulte os órgãos competentes.
 """
 
         st.markdown(texto)
-        texto_whatsapp = texto.replace("**", "").replace("*", "")
-        botao_whatsapp(texto_whatsapp)
+        botao_whatsapp(texto)
 
     except Exception as e:
         st.error(f"Erro ao calcular: {e}")

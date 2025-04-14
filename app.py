@@ -1,84 +1,83 @@
-import streamlit as st
-from calculadora import CalculadoraDespesasImoveis
+from calculadora_despesas import (
+    calcular_itbi,
+    calcular_lavratura_contrato,
+)
 
-st.set_page_config(page_title="Calculadora de Despesas de Imóveis", layout="centered")
-st.title("🏠 Calculadora de Despesas de Imóveis")
 
-calculadora = CalculadoraDespesasImoveis()
+def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=False):
+    tabela_registro = [
+        (625.89, 111),
+        (1251.79, 141.69),
+        (2503.58, 205.48),
+        (5007.15, 403.86),
+        (10014.30, 432.19),
+        (15021.47, 550.29),
+        (25035.77, 696.73),
+        (37553.65, 923.45),
+        (50071.55, 1098.21),
+        (62589.43, 1539.87),
+        (100143.09, 2314.53),
+        (150214.64, 3117.53),
+        (250357.73, 4092.94),
+        (375536.58, 4822.74),
+        (500715.44, 5788.70),
+        (751073.17, 6936.52),
+        (1126609.75, 8065.44),
+        (1502146.34, 8610.85),
+    ]
 
-st.header("Preencha os dados abaixo:")
+    def custo(valor):
+        for limite, custo in tabela_registro:
+            if valor <= limite:
+                return custo
+        return tabela_registro[-1][1]
 
-col1, col2 = st.columns(2)
-with col1:
-    valor_imovel = st.number_input("Valor do Imóvel (R$)", min_value=0.0, value=500000.0)
-    valor_financiado = st.number_input("Valor Financiado (R$)", min_value=0.0, value=300000.0)
-    seguro = st.number_input("Seguro (verificar na simulação)", min_value=0.0, value=220.0)
+    custo_imovel = custo(valor_imovel)
+    custo_financiado = custo(valor_financiado)
 
-with col2:
-    tipo_financiamento = st.selectbox("Tipo de Financiamento", ["SBPE", "Minha Casa Minha Vida", "Pro Cotista"])
-    cidade = st.selectbox("Cidade", ["Goiânia", "Trindade", "Senador Canedo", "Aparecida de Goiânia"])
-    renda_bruta = st.number_input("Renda Bruta (R$) (se for Aparecida de Goiânia)", min_value=0.0, value=4000.0)
-    primeiro_imovel = st.checkbox("É o primeiro imóvel financiado?", value=True)
+    total = custo_imovel + custo_financiado
 
-if st.button("Calcular"):
-    try:
-        if cidade == "Aparecida de Goiânia":
-            resultado = calculadora.calcular_aparecida(valor_imovel, valor_financiado, tipo_financiamento, renda_bruta, seguro, primeiro_imovel)
-        else:
-            resultado = calculadora.calcular_goiania_trindade_canedo(valor_imovel, valor_financiado, tipo_financiamento, cidade, seguro, primeiro_imovel)
+    if primeiro_imovel:
+        total *= 0.5
 
+    return round(total, 2)
+
+
+class CalculadoraDespesasImoveis:
+    def calcular_goiania_trindade_canedo(self, valor_imovel, valor_financiado, tipo_financiamento, cidade, seguro, primeiro_imovel):
         entrada = valor_imovel - valor_financiado
 
-        texto = f"""
-*CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO*
+        itbi = calcular_itbi(cidade, valor_imovel, valor_financiado)
+        lavratura = calcular_lavratura_contrato(tipo_financiamento, valor_financiado)
+        registro = calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel)
 
-*Dados do Imóvel e Financiamento*
+        total_despesas = itbi + lavratura + registro + seguro
 
-* Valor de Compra e Venda: R$ {valor_imovel:,.2f}
+        return {
+            "Entrada": entrada,
+            "ITBI": itbi,
+            "Lavratura": lavratura,
+            "Registro": registro,
+            "Seguro (conferir na simulação)": seguro,
+            "Total Despesas": total_despesas
+        }
 
-* Valor Financiado: R$ {valor_financiado:,.2f}
+    def calcular_aparecida(self, valor_imovel, valor_financiado, tipo_financiamento, renda_bruta, seguro, primeiro_imovel):
+        entrada = valor_imovel - valor_financiado
 
-* Valor de Entrada: R$ {resultado['Entrada']:,.2f}
+        itbi = calcular_itbi("Aparecida de Goiânia", valor_imovel, valor_financiado, renda_bruta)
+        lavratura = calcular_lavratura_contrato(tipo_financiamento, valor_financiado)
+        registro = calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel)
 
-* Tipo de Financiamento: {tipo_financiamento}
+        total_despesas = itbi + lavratura + registro + seguro
 
-*Despesas Relacionadas à Compra do Imóvel*
+        return {
+            "Entrada": entrada,
+            "ITBI": itbi,
+            "Lavratura": lavratura,
+            "Registro": registro,
+            "Seguro (conferir na simulação)": seguro,
+            "Total Despesas": total_despesas
+        }
 
-1️⃣ *Caixa Econômica Federal – R$ {resultado['Lavratura']:,.2f}*
-Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento. 
-
-2️⃣ *ITBI – Prefeitura – R$ {resultado['ITBI']:,.2f}*
-O Imposto sobre Transmissão de Bens Imóveis (ITBI) pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
-
-*Sobre o valor do imóvel: (__% sobre R$ _____) = R$ _____*
-
-*Sobre o valor financiado: (__% sobre R$ _____) = R$ _____*
-
-*Taxa de Expediente da avaliação do ITBI (se aplicável): R$ ___*
-
-*Total estimado do ITBI: R$ {resultado['ITBI']:,.2f}*
-
-3️⃣ *Cartório de Registro de Imóveis – R$ {resultado['Registro']:,.2f}* 
-Esse valor refere-se ao registro do contrato de financiamento, obrigatório para garantir a legalidade da compra e a segurança jurídica do comprador.
-
-✅ *Desconto de 50% aplicado? {'(X) Sim' if primeiro_imovel else '( ) Não'}*
-
-💡 Desconto: Se for o primeiro imóvel residencial financiado pelo SFH (Sistema Financeiro de Habitação), pode haver um desconto de 50% na taxa de registro.
-
-💡 Obs.: O cálculo foi feito com base no valor de compra e financiamento, mas pode mudar caso a avaliação da Prefeitura seja maior ou o imóvel tenha mais de uma matrícula.
-
-*Total Geral das Despesas*
-
-💰 *Aproximadamente R$ {resultado['Total Despesas']:,.2f}*
-
-⚠️ *Aviso Importante:*
-A Suporte Soluções Imobiliárias não é responsável pelo cálculo oficial das despesas relacionadas à compra do imóvel. O presente levantamento tem caráter informativo e visa apenas auxiliar o cliente a entender os custos envolvidos na aquisição, com base em valores estimados.
-
-Para obter informações precisas e realizar os pagamentos, recomenda-se entrar em contato com os órgãos responsáveis, como Prefeitura e o Cartório de Registro de Imóveis.
-"""
-
-        st.text_area("Resultado do Cálculo:", value=texto, height=600)
-
-    except Exception as e:
-        st.error(f"Erro ao calcular: {e}")
 

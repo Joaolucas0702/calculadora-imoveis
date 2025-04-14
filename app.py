@@ -6,18 +6,22 @@ st.title("🏠 Calculadora de Despesas de Imóveis")
 
 calculadora = CalculadoraDespesasImoveis()
 
+# 🔢 Formatação de moeda
+def moeda(valor):
+    return f"R$ {valor:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
+
 st.header("Preencha os dados abaixo:")
 
 col1, col2 = st.columns(2)
 with col1:
-    valor_imovel = st.number_input("Valor do Imóvel (R$)", min_value=0.0, value=0.0)
-    valor_financiado = st.number_input("Valor Financiado (R$)", min_value=0.0, value=0.0)
-    seguro = st.number_input("Seguro (verificar na simulação)", min_value=0.0, value=0.0)
+    valor_imovel = st.number_input("Valor do Imóvel (R$)", min_value=0.0, value=500000.0)
+    valor_financiado = st.number_input("Valor Financiado (R$)", min_value=0.0, value=300000.0)
+    seguro = st.number_input("Seguro (verificar na simulação)", min_value=0.0, value=220.0)
 
 with col2:
     tipo_financiamento = st.selectbox("Tipo de Financiamento", ["SBPE", "Minha Casa Minha Vida", "Pro Cotista"])
     cidade = st.selectbox("Cidade", ["Goiânia", "Trindade", "Senador Canedo", "Aparecida de Goiânia"])
-    renda_bruta = st.number_input("Renda Bruta (R$) (se for Aparecida de Goiânia)", min_value=0.0, value=0.0)
+    renda_bruta = st.number_input("Renda Bruta (R$) (se for Aparecida de Goiânia)", min_value=0.0, value=4000.0)
     primeiro_imovel = st.checkbox("É o primeiro imóvel financiado?", value=True)
 
 if st.button("Calcular"):
@@ -33,7 +37,7 @@ if st.button("Calcular"):
 
         entrada = valor_imovel - valor_financiado
 
-        # Detalhamento do ITBI com base na cidade
+        # 📋 Explicação dinâmica do ITBI por cidade
         if cidade == "Aparecida de Goiânia":
             itbi_entrada = entrada * 0.025
             if renda_bruta <= 4400:
@@ -45,39 +49,39 @@ if st.button("Calcular"):
             itbi_fin = valor_financiado * (aliq / 100)
             taxa_exp = 30.00
             itbi_detalhe = f"""
-*Sobre o valor da entrada: (2,5% sobre R$ {entrada:,.2f}) = R$ {itbi_entrada:,.2f}*
+*Sobre o valor da entrada: (2,5% sobre {moeda(entrada)}) = {moeda(itbi_entrada)}*
 
-*Sobre o valor financiado: ({aliq}% sobre R$ {valor_financiado:,.2f}) = R$ {itbi_fin:,.2f}*
+*Sobre o valor financiado: ({aliq}% sobre {moeda(valor_financiado)}) = {moeda(itbi_fin)}*
 
-*Taxa de Expediente: R$ {taxa_exp:.2f}*
+*Taxa de Expediente: {moeda(taxa_exp)}*
 
-*Total estimado do ITBI: R$ {resultado['ITBI']:,.2f}*
+*Total estimado do ITBI: {moeda(resultado['ITBI'])}*
 """
         elif cidade == "Senador Canedo":
             itbi_detalhe = f"""
-*1,5% sobre a entrada (R$ {entrada:,.2f}) + 0,5% sobre o valor financiado (R$ {valor_financiado:,.2f})*
+*1,5% sobre a entrada ({moeda(entrada)}) + 0,5% sobre o valor financiado ({moeda(valor_financiado)})*
 
-*Taxa de Expediente: R$ 8,50*
+*Taxa de Expediente: {moeda(8.50)}*
 
-*Total estimado do ITBI: R$ {resultado['ITBI']:,.2f}*
+*Total estimado do ITBI: {moeda(resultado['ITBI'])}*
 """
         elif cidade == "Trindade":
             base = valor_imovel * 0.02
             itbi_detalhe = f"""
-*2% sobre o valor do imóvel (R$ {valor_imovel:,.2f}) = R$ {base:,.2f}*
+*2% sobre o valor do imóvel ({moeda(valor_imovel)}) = {moeda(base)}*
 
-*Taxa de Expediente: R$ 4,50*
+*Taxa de Expediente: {moeda(4.50)}*
 
-*Total estimado do ITBI: R$ {resultado['ITBI']:,.2f}*
+*Total estimado do ITBI: {moeda(resultado['ITBI'])}*
 """
         elif cidade == "Goiânia":
             base = valor_imovel * 0.02
             itbi_detalhe = f"""
-*2% sobre o valor do imóvel (R$ {valor_imovel:,.2f}) = R$ {base:,.2f}*
+*2% sobre o valor do imóvel ({moeda(valor_imovel)}) = {moeda(base)}*
 
-*Taxa de Expediente: R$ 100,00*
+*Taxa de Expediente: {moeda(100)}*
 
-*Total estimado do ITBI: R$ {resultado['ITBI']:,.2f}*
+*Total estimado do ITBI: {moeda(resultado['ITBI'])}*
 """
         else:
             itbi_detalhe = "*Detalhamento indisponível para esta cidade.*"
@@ -87,25 +91,25 @@ if st.button("Calcular"):
 
 *Dados do Imóvel e Financiamento*
 
-* Valor de Compra e Venda: R$ {valor_imovel:,.2f}
-* Valor Financiado: R$ {valor_financiado:,.2f}
-* Valor de Entrada: R$ {entrada:,.2f}
+* Valor de Compra e Venda: {moeda(valor_imovel)}
+* Valor Financiado: {moeda(valor_financiado)}
+* Valor de Entrada: {moeda(entrada)}
 * Tipo de Financiamento: {tipo_financiamento}
 
 *Despesas Relacionadas à Compra do Imóvel*
 
-1️⃣ *Caixa Econômica Federal – R$ {resultado['Lavratura']:,.2f}*  
+1️⃣ *Caixa Econômica Federal – {moeda(resultado['Lavratura'])}*  
 Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento. 
 
-2️⃣ *ITBI – Prefeitura – R$ {resultado['ITBI']:,.2f}*  
+2️⃣ *ITBI – Prefeitura – {moeda(resultado['ITBI'])}*  
 O Imposto sobre Transmissão de Bens Imóveis (ITBI) pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
 
 {itbi_detalhe}
 
-3️⃣ *Cartório de Registro de Imóveis – R$ {resultado['Registro']:,.2f}*  
+3️⃣ *Cartório de Registro de Imóveis – {moeda(resultado['Registro'])}*  
 Esse valor refere-se ao registro do contrato de financiamento, obrigatório para garantir a legalidade da compra e a segurança jurídica do comprador.
 
-✅ Desconto de 50% aplicado? {'(X) Sim' if primeiro_imovel else '(X) Não'}
+✅ Desconto de 50% aplicado? {'(X) Sim' if primeiro_imovel else '( ) Não'}
 
 💡 Desconto: Se for o primeiro imóvel residencial financiado pelo SFH (Sistema Financeiro de Habitação), pode haver um desconto de 50% na taxa de registro.
 
@@ -113,7 +117,7 @@ Esse valor refere-se ao registro do contrato de financiamento, obrigatório para
 
 *Total Geral das Despesas*
 
-💰 *Aproximadamente R$ {resultado['Total Despesas']:,.2f}*
+💰 *Aproximadamente {moeda(resultado['Total Despesas'])}*
 
 ⚠️ *Aviso Importante:*  
 A Suporte Soluções Imobiliárias não é responsável pelo cálculo oficial das despesas relacionadas à compra do imóvel. O presente levantamento tem caráter informativo e visa apenas auxiliar o cliente a entender os custos envolvidos na aquisição, com base em valores estimados.
@@ -124,6 +128,7 @@ Para obter informações precisas e realizar os pagamentos, recomenda-se entrar 
 
     except Exception as e:
         st.error(f"Erro ao calcular: {e}")
+
 
 
 

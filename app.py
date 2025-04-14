@@ -1,8 +1,5 @@
 import streamlit as st
 from calculadora import CalculadoraDespesasImoveis
-from xhtml2pdf import pisa
-import io
-import base64
 import urllib.parse
 
 st.set_page_config(page_title="Calculadora de Despesas de Imóveis", layout="centered")
@@ -11,7 +8,6 @@ st.title("🏠 Calculadora de Despesas de Imóveis")
 calculadora = CalculadoraDespesasImoveis()
 
 # 🔢 Funções auxiliares
-
 def converter_para_float(valor_str):
     try:
         return float(valor_str.replace(".", "").replace(",", "."))
@@ -32,17 +28,6 @@ def formatar_moeda_input(valor_str):
 
 def moeda(valor):
     return f"R$ {valor:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
-
-def gerar_pdf_html(html):
-    result = io.BytesIO()
-    pisa.CreatePDF(io.StringIO(html), dest=result)
-    return result.getvalue()
-
-def download_button_pdf(texto_html, nome_arquivo="relatorio.pdf"):
-    pdf_data = gerar_pdf_html(texto_html)
-    b64 = base64.b64encode(pdf_data).decode()
-    href = f'<a href="data:application/pdf;base64,{b64}" download="{nome_arquivo}">📄 Baixar PDF</a>'
-    st.markdown(href, unsafe_allow_html=True)
 
 def botao_whatsapp(mensagem):
     mensagem_encoded = urllib.parse.quote(mensagem)
@@ -101,77 +86,69 @@ if st.button("Calcular"):
             itbi_fin = valor_financiado * (aliq / 100)
             taxa_exp = 30.00
             itbi_detalhe = f"""
-*Sobre o valor da entrada: (2,5% sobre {moeda(entrada)}) = {moeda(itbi_entrada)}*
-*Sobre o valor financiado: ({aliq}% sobre {moeda(valor_financiado)}) = {moeda(itbi_fin)}*
-*Taxa de Expediente: {moeda(taxa_exp)}*
-*Total estimado do ITBI: {moeda(resultado['ITBI'])}*
+**Sobre o valor da entrada:** (2,5% sobre {moeda(entrada)}) = {moeda(itbi_entrada)}
+**Sobre o valor financiado:** ({aliq}% sobre {moeda(valor_financiado)}) = {moeda(itbi_fin)}
+**Taxa de Expediente:** {moeda(taxa_exp)}
+**Total estimado do ITBI:** {moeda(resultado['ITBI'])}
 """
         elif cidade == "Senador Canedo":
             itbi_detalhe = f"""
-*1,5% sobre a entrada ({moeda(entrada)}) + 0,5% sobre o valor financiado ({moeda(valor_financiado)})*
-*Taxa de Expediente: {moeda(8.50)}*
-*Total estimado do ITBI: {moeda(resultado['ITBI'])}*
+**1,5% sobre a entrada** ({moeda(entrada)}) + **0,5% sobre o valor financiado** ({moeda(valor_financiado)})
+**Taxa de Expediente:** {moeda(8.50)}
+**Total estimado do ITBI:** {moeda(resultado['ITBI'])}
 """
         elif cidade == "Trindade":
             base = valor_imovel * 0.02
             itbi_detalhe = f"""
-*2% sobre o valor do imóvel ({moeda(valor_imovel)}) = {moeda(base)}*
-*Taxa de Expediente: {moeda(4.50)}*
-*Total estimado do ITBI: {moeda(resultado['ITBI'])}*
+**2% sobre o valor do imóvel** ({moeda(valor_imovel)}) = {moeda(base)}
+**Taxa de Expediente:** {moeda(4.50)}
+**Total estimado do ITBI:** {moeda(resultado['ITBI'])}
 """
         elif cidade == "Goiânia":
             base = valor_imovel * 0.02
             itbi_detalhe = f"""
-*2% sobre o valor do imóvel ({moeda(valor_imovel)}) = {moeda(base)}*
-*Taxa de Expediente: {moeda(100)}*
-*Total estimado do ITBI: {moeda(resultado['ITBI'])}*
+**2% sobre o valor do imóvel** ({moeda(valor_imovel)}) = {moeda(base)}
+**Taxa de Expediente:** {moeda(100)}
+**Total estimado do ITBI:** {moeda(resultado['ITBI'])}
 """
         else:
-            itbi_detalhe = "*Detalhamento indisponível para esta cidade.*"
+            itbi_detalhe = "**Detalhamento indisponível para esta cidade.**"
 
         texto = f"""
-*CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO*
+### 🧾 CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO
 
-*Dados do Imóvel e Financiamento*
+#### 🏡 Dados do Imóvel e Financiamento
 
-* Valor de Compra e Venda: {moeda(valor_imovel)}
-* Valor Financiado: {moeda(valor_financiado)}
-* Valor de Entrada: {moeda(entrada)}
-* Tipo de Financiamento: {tipo_financiamento}
+- **Valor de Compra e Venda:** {moeda(valor_imovel)}
+- **Valor Financiado:** {moeda(valor_financiado)}
+- **Valor de Entrada:** {moeda(entrada)}
+- **Tipo de Financiamento:** {tipo_financiamento}
 
-*Despesas Relacionadas à Compra do Imóvel*
+#### 💰 Despesas Relacionadas à Compra do Imóvel
 
-1️⃣ *Caixa Econômica Federal – {moeda(resultado['Lavratura'])}*  
+**1️⃣ Caixa Econômica Federal – {moeda(resultado['Lavratura'])}**  
 Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento. 
 
-2️⃣ *ITBI – Prefeitura – {moeda(resultado['ITBI'])}*  
-O Imposto sobre Transmissão de Bens Imóveis (ITBI) pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
+**2️⃣ ITBI – Prefeitura – {moeda(resultado['ITBI'])}**  
+O ITBI pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
 
 {itbi_detalhe}
 
-3️⃣ *Cartório de Registro de Imóveis – {moeda(resultado['Registro'])}*  
-Esse valor refere-se ao registro do contrato de financiamento, obrigatório para garantir a legalidade da compra e a segurança jurídica do comprador.
+**3️⃣ Cartório de Registro de Imóveis – {moeda(resultado['Registro'])}**  
+Esse valor refere-se ao registro do contrato de financiamento.
 
-✅ Desconto de 50% aplicado? {'(X) Sim' if primeiro_imovel else '( ) Não'}
+✅ **Desconto de 50% aplicado?** {'Sim ✅' if primeiro_imovel else 'Não ❌'}
 
-💡 Desconto: Se for o primeiro imóvel residencial financiado pelo SFH (Sistema Financeiro de Habitação), pode haver um desconto de 50% na taxa de registro.
+💡 *Obs.: Se for o primeiro imóvel residencial financiado pelo SFH, pode haver um desconto de 50% na taxa de registro.*
 
-💡 Obs.: O cálculo foi feito com base no valor de compra e financiamento, mas pode mudar caso a avaliação da Prefeitura seja maior ou o imóvel tenha mais de uma matrícula.
+#### 💵 Total Geral das Despesas
 
-*Total Geral das Despesas*
+**Total estimado:** {moeda(resultado['Total Despesas'])}
 
-💰 *Aproximadamente {moeda(resultado['Total Despesas'])}*
-
-⚠️ *Aviso Importante:*  
-A Suporte Soluções Imobiliárias não é responsável pelo cálculo oficial das despesas relacionadas à compra do imóvel. O presente levantamento tem caráter informativo e visa apenas auxiliar o cliente a entender os custos envolvidos na aquisição, com base em valores estimados.
-
-Para obter informações precisas e realizar os pagamentos, recomenda-se entrar em contato com os órgãos responsáveis, como Prefeitura e o Cartório de Registro de Imóveis.
+⚠️ *Este cálculo é apenas uma estimativa informativa. Para valores oficiais, consulte os órgãos competentes.*
 """
 
-        texto_html = texto.replace("\n", "<br>")
-        st.markdown(texto, unsafe_allow_html=False)
-
-        download_button_pdf(texto_html, nome_arquivo="calculo_imovel.pdf")
+        st.markdown(texto)
         botao_whatsapp(texto)
 
     except Exception as e:

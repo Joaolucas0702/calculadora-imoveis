@@ -98,7 +98,7 @@ if st.button("Calcular"):
 """
         elif cidade == "Senador Canedo":
             itbi_detalhe = f"""
-- Sobre o valor do imóvel: (1,5% sobre $ {moeda(entrada)}) = $ {moeda(entrada * 0.015)}  
+- Sobre o valor do imóvel: (1,5% sobre R$ (entrada)) = $ (entrada * 0.015)
 - Sobre o valor financiado: (0,5% sobre R\$ {moeda(valor_financiado)}) = R\$ {moeda(valor_financiado * 0.005)}  
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(8.50)}  
 - **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
@@ -106,14 +106,14 @@ if st.button("Calcular"):
         elif cidade == "Trindade":
             base = valor_imovel * 0.02
             itbi_detalhe = f"""
-- Sobre o valor do imóvel: (2% sobre $ {moeda(valor_imovel)}) = $ {moeda(base)}  
+- Sobre o valor do imóvel: (2% sobre R$ (valor_imovel)) = R$ (base)
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(4.50)}  
 - **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
 """
         elif cidade == "Goiânia":
             base = valor_imovel * 0.02
             itbi_detalhe = f"""
-- Sobre o valor do imóvel: (2% sobre $ {moeda(valor_imovel)}) = $ {moeda(base)}  
+- Sobre o valor do imóvel: (2% sobre R$(valor_imovel)) = R$ (base)  
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(100)}  
 - **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
 """

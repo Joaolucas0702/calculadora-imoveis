@@ -149,9 +149,20 @@ Esse valor refere-se ao registro do contrato de financiamento.
 ⚠️ *Este cálculo é apenas uma estimativa informativa. Para valores oficiais, consulte os órgãos competentes.*
 """
 
-        st.markdown(texto)
-        texto_whatsapp = texto.replace("**", "").replace("*", "")
-        botao_whatsapp(texto_whatsapp)
+       # Texto com emojis para exibição no Streamlit
+st.markdown(texto)
+
+# Versão alternativa sem emojis para o WhatsApp
+texto_whatsapp = texto
+emojis = ["📟", "🏡", "💰", "1️⃣", "2️⃣", "3️⃣", "✅", "❌", "💡", "💵", "⚠️"]
+for emoji in emojis:
+    texto_whatsapp = texto_whatsapp.replace(emoji, "")
+
+# Remover marcações Markdown
+texto_whatsapp = texto_whatsapp.replace("**", "").replace("*", "")
+
+botao_whatsapp(texto_whatsapp.strip())
+
 
     except Exception as e:
         st.error(f"Erro ao calcular: {e}")

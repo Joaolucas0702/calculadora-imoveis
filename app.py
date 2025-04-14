@@ -45,13 +45,7 @@ if st.button("Calcular"):
 Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento. 
 
 2️⃣ *ITBI – Prefeitura – R$ {resultado['ITBI']:,.2f}*
-O Imposto sobre Transmissão de Bens Imóveis (ITBI) pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
-
-*Sobre o valor do imóvel: (__% sobre R$ _____) = R$ _____*
-
-*Sobre o valor financiado: (__% sobre R$ _____) = R$ _____*
-
-*Taxa de Expediente da avaliação do ITBI (se aplicável): R$ ___*
+O Imposto sobre Transmissão de Bens Imóveis (ITBI) pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal
 
 *Total estimado do ITBI: R$ {resultado['ITBI']:,.2f}*
 

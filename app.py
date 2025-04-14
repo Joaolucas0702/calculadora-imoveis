@@ -146,7 +146,11 @@ Esse valor refere-se ao registro do contrato de financiamento.
 
 **Total estimado:** {moeda(resultado['Total Despesas'])}
 
-⚠️ *Este cálculo é apenas uma estimativa informativa. Para valores oficiais, consulte os órgãos competentes.*
+⚠️  Aviso Importante:
+
+A Suporte Soluções Imobiliárias não é responsável pelo cálculo oficial das despesas relacionadas à compra do imóvel. O presente levantamento tem caráter informativo e visa apenas auxiliar o cliente a entender os custos envolvidos na aquisição, com base em valores estimados.
+
+Para obter informações precisas e realizar os pagamentos, recomenda-se entrar em contato com os órgãos responsáveis, como Prefeitura e o Cartório de Registro de Imóveis
 """
 
         st.markdown(texto)

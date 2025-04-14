@@ -169,10 +169,14 @@ Para obter informações precisas e realizar os pagamentos, recomenda-se entrar 
 """
 
         texto_html = texto.replace("\n", "<br>")
-        st.markdown(texto_html, unsafe_allow_html=True)
+        st.markdown(texto)
 
         download_button_pdf(texto_html, nome_arquivo="calculo_imovel.pdf")
         botao_whatsapp(texto)
+
+    except Exception as e:
+        st.error(f"Erro ao calcular: {e}")
+
 
     except Exception as e:
         st.error(f"Erro ao calcular: {e}")

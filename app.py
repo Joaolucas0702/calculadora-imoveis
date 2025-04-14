@@ -93,9 +93,12 @@ Total estimado do ITBI: R$ {moeda(resultado['ITBI'])}
 """
         elif cidade == "Senador Canedo":
             itbi_detalhe = f"""
-Sobre o valor do imóvel: (1,5% sobre R$ {moeda(entrada)}) = {moeda(entrada * 0.015)}
+Sobre o valor do imóvel: (1,5% sobre R$ {(entrada)}) = {moeda(entrada * 0.015)}
+
 Sobre o valor financiado: (0,5% sobre R$ {moeda(valor_financiado)}) = {moeda(valor_financiado * 0.005)}
+
 Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(8.50)}
+
 Total estimado do ITBI: R$ {moeda(resultado['ITBI'])}
 """
         elif cidade == "Trindade":

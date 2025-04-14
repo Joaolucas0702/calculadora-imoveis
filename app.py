@@ -93,16 +93,31 @@ if st.button("Calcular"):
 """
         elif cidade == "Senador Canedo":
             itbi_detalhe = f"""
-- Sobre o valor do imóvel: (1,5% sobre R\$ {moeda(entrada)}) = R\$ {moeda(entrada * 0.015)}  
+- Sobre o valor da entrada: (2,5% sobre R\$ {moeda(entrada)}) = R\$ {moeda(entrada * 0.015)}  
 - Sobre o valor financiado: (0,5% sobre R\$ {moeda(valor_financiado)}) = {moeda(valor_financiado * 0.005)}  
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(8.50)}  
 - **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
 """
-        elif cidade == "Trindade":
-            base = valor_imovel * 0.02
+                elif cidade == "Trindade":
+            entrada = valor_imovel - valor_financiado
+
+            if valor_financiado <= 500000:
+                aliquota_financiado = 0.005
+            elif valor_financiado <= 1000000:
+                aliquota_financiado = 0.01
+            elif valor_financiado <= 1500000:
+                aliquota_financiado = 0.015
+            else:
+                aliquota_financiado = 0.02
+
+            itbi_entrada = entrada * 0.02
+            itbi_financiado = valor_financiado * aliquota_financiado
+            taxa_exp = 4.50
+
             itbi_detalhe = f"""
-- Sobre o valor do imóvel: (2% sobre R\$ {moeda(valor_imovel)}) = {moeda(base)}  
-- Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(4.50)}  
+- Sobre a entrada: (2% sobre R\$ {moeda(entrada)}) = R\$ {moeda(itbi_entrada)}  
+- Sobre o valor financiado: ({aliquota_financiado * 100:.1f}% sobre R\$ {moeda(valor_financiado)}) = R\$ {moeda(itbi_financiado)}  
+- Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(taxa_exp)}  
 - **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
 """
         elif cidade == "Goiânia":

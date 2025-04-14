@@ -1,7 +1,6 @@
 import streamlit as st
 from calculadora import CalculadoraDespesasImoveis
 import urllib.parse
-import re
 
 st.set_page_config(page_title="Calculadora de Despesas de Imóveis", layout="centered")
 st.title("🏠 Calculadora de Despesas de Imóveis")
@@ -28,14 +27,10 @@ def formatar_moeda_input(valor_str):
     return f"{parte_int_formatada},{partes[1][:2].ljust(2,'0')}"
 
 def moeda(valor):
-    return f"R$ {valor:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
-
-def remover_emojis(texto):
-    return re.sub(r'[\U00010000-\U0010ffff\u2600-\u26FF\u2700-\u27BF]+', '', texto)
+    return f"R\$ {valor:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
 
 def botao_whatsapp(mensagem):
-    mensagem_limpa = remover_emojis(mensagem)
-    mensagem_encoded = urllib.parse.quote(mensagem_limpa)
+    mensagem_encoded = urllib.parse.quote(mensagem)
     link = f"https://wa.me/?text={mensagem_encoded}"
     html_link = f'<a href="{link}" target="_blank">📲 Compartilhar no WhatsApp</a>'
     st.markdown(html_link, unsafe_allow_html=True)
@@ -90,8 +85,7 @@ if st.button("Calcular"):
                 aliq = 1.5
             itbi_fin = valor_financiado * (aliq / 100)
             taxa_exp = 30.00
-            if cidade == "Senador Canedo":
-    itbi_detalhe = f"""
+            itbi_detalhe = f"""
 - Sobre o valor da entrada: (2,5% sobre R\$ {moeda(entrada)}) = R\$ {moeda(itbi_entrada)}  
 - Sobre o valor financiado: ({aliq}% sobre R\$ {moeda(valor_financiado)}) = R\$ {moeda(itbi_fin)}  
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(taxa_exp)}  
@@ -122,41 +116,42 @@ if st.button("Calcular"):
             itbi_detalhe = "**Detalhamento indisponível para esta cidade.**"
 
         texto = f"""
-📟 CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO
+### 📟 CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO
 
-🏡 Dados do Imóvel e Financiamento
+#### 🏡 Dados do Imóvel e Financiamento
 
-- Valor de Compra e Venda: {moeda(valor_imovel)}
-- Valor Financiado: {moeda(valor_financiado)}
-- Valor de Entrada: {moeda(entrada)}
-- Tipo de Financiamento: {tipo_financiamento}
+- **Valor de Compra e Venda:** R\$ {moeda(valor_imovel)}
+- **Valor Financiado:** R\$ {moeda(valor_financiado)}
+- **Valor de Entrada:** R\$ {moeda(entrada)}
+- **Tipo de Financiamento:** {tipo_financiamento}
 
-💰 Despesas Relacionadas à Compra do Imóvel
+#### 💰 Despesas Relacionadas à Compra do Imóvel
 
-1️⃣ Caixa Econômica Federal – {moeda(resultado['Lavratura'])}  
-Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento.
+**1️⃣ Caixa Econômica Federal – R\$ {moeda(resultado['Lavratura'])}**  
+Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento. 
 
-2️⃣ ITBI – Prefeitura – {moeda(resultado['ITBI'])}  
+**2️⃣ ITBI – Prefeitura – R\$ {moeda(resultado['ITBI'])}**  
 O ITBI pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
 
 {itbi_detalhe}
 
-3️⃣ Cartório de Registro de Imóveis – {moeda(resultado['Registro'])}  
+**3️⃣ Cartório de Registro de Imóveis – R\$ {moeda(resultado['Registro'])}**  
 Esse valor refere-se ao registro do contrato de financiamento.
 
-✅ Desconto de 50% aplicado? {'Sim ✅' if primeiro_imovel else 'Não ❌'}
+✅ **Desconto de 50% aplicado?** {'Sim ✅' if primeiro_imovel else 'Não ❌'}
 
-💡 Obs.: Se for o primeiro imóvel residencial financiado pelo SFH, pode haver um desconto de 50% na taxa de registro.
+💡 *Obs.: Se for o primeiro imóvel residencial financiado pelo SFH, pode haver um desconto de 50% na taxa de registro.*
 
-💵 Total Geral das Despesas
+#### 💵 Total Geral das Despesas
 
-Total estimado: {moeda(resultado['Total Despesas'])}
+**Total estimado:** R\$ {moeda(resultado['Total Despesas'])}
 
-⚠️ Este cálculo é apenas uma estimativa informativa. Para valores oficiais, consulte os órgãos competentes.
+⚠️ *Este cálculo é apenas uma estimativa informativa. Para valores oficiais, consulte os órgãos competentes.*
 """
 
         st.markdown(texto)
-        botao_whatsapp(texto)
+        texto_whatsapp = texto.replace("**", "").replace("*", "")
+        botao_whatsapp(texto_whatsapp)
 
     except Exception as e:
         st.error(f"Erro ao calcular: {e}")

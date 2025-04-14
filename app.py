@@ -146,10 +146,13 @@ A Suporte Soluções Imobiliárias não é responsável pelo cálculo oficial da
 Para obter informações precisas e realizar os pagamentos, recomenda-se entrar em contato com os órgãos responsáveis, como Prefeitura e o Cartório de Registro de Imóveis.
 """
 
-        st.text_area("Resultado do Cálculo:", value=texto, height=650)
+        # Exibe texto fixo com markdown puro (não editável)
+        texto_html = texto.replace("\n", "<br>")
+        st.markdown(texto, unsafe_allow_html=False)
 
-    except Exception as e:
-        st.error(f"Erro ao calcular: {e}")
+        # Botões PDF e WhatsApp
+        download_button_pdf(texto_html, nome_arquivo="calculo_imovel.pdf")
+        botao_whatsapp(texto)
 
     except Exception as e:
         st.error(f"Erro ao calcular: {e}")

@@ -1,6 +1,7 @@
 import streamlit as st
 from calculadora import CalculadoraDespesasImoveis
 import urllib.parse
+import re
 
 st.set_page_config(page_title="Calculadora de Despesas de Imóveis", layout="centered")
 st.title("🏠 Calculadora de Despesas de Imóveis")
@@ -27,10 +28,14 @@ def formatar_moeda_input(valor_str):
     return f"{parte_int_formatada},{partes[1][:2].ljust(2,'0')}"
 
 def moeda(valor):
-    return f"R\$ {valor:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
+    return f"R$ {valor:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
+
+def remover_emojis(texto):
+    return re.sub(r'[\U00010000-\U0010ffff\u2600-\u26FF\u2700-\u27BF]+', '', texto)
 
 def botao_whatsapp(mensagem):
-    mensagem_encoded = urllib.parse.quote(mensagem)
+    mensagem_limpa = remover_emojis(mensagem)
+    mensagem_encoded = urllib.parse.quote(mensagem_limpa)
     link = f"https://wa.me/?text={mensagem_encoded}"
     html_link = f'<a href="{link}" target="_blank">📲 Compartilhar no WhatsApp</a>'
     st.markdown(html_link, unsafe_allow_html=True)
@@ -86,31 +91,31 @@ if st.button("Calcular"):
             itbi_fin = valor_financiado * (aliq / 100)
             taxa_exp = 30.00
             itbi_detalhe = f"""
-- Sobre o valor da entrada: (2,5% sobre R\$ {moeda(entrada)}) = R\$ {moeda(itbi_entrada)}  
-- Sobre o valor financiado: ({aliq}% sobre R\$ {moeda(valor_financiado)}) = R\$ {moeda(itbi_fin)}  
-- Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(taxa_exp)}  
-- **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
+- Sobre o valor da entrada: (2,5% sobre R$ {moeda(entrada)}) = R$ {moeda(itbi_entrada)}  
+- Sobre o valor financiado: ({aliq}% sobre R$ {moeda(valor_financiado)}) = R$ {moeda(itbi_fin)}  
+- Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(taxa_exp)}  
+- **Total estimado do ITBI:** R$ {moeda(resultado['ITBI'])}
 """
         elif cidade == "Senador Canedo":
             itbi_detalhe = f"""
-- Sobre o valor do imóvel: (1,5% sobre R\$ {moeda(entrada)}) = R\$ {moeda(entrada * 0.015)}  
-- Sobre o valor financiado: (0,5% sobre R\$ {moeda(valor_financiado)}) = R\$ {moeda(valor_financiado * 0.005)}  
-- Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(8.50)}  
-- **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
+- Sobre o valor do imóvel: (1,5% sobre R$ {moeda(entrada)}) = R$ {moeda(entrada * 0.015)}  
+- Sobre o valor financiado: (0,5% sobre R$ {moeda(valor_financiado)}) = R$ {moeda(valor_financiado * 0.005)}  
+- Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(8.50)}  
+- **Total estimado do ITBI:** R$ {moeda(resultado['ITBI'])}
 """
         elif cidade == "Trindade":
             base = valor_imovel * 0.02
             itbi_detalhe = f"""
-- Sobre o valor do imóvel: (2% sobre R\$ {moeda(valor_imovel)}) = R\$ {moeda(base)}  
-- Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(4.50)}  
-- **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
+- Sobre o valor do imóvel: (2% sobre R$ {moeda(valor_imovel)}) = R$ {moeda(base)}  
+- Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(4.50)}  
+- **Total estimado do ITBI:** R$ {moeda(resultado['ITBI'])}
 """
         elif cidade == "Goiânia":
             base = valor_imovel * 0.02
             itbi_detalhe = f"""
-- Sobre o valor do imóvel: (2% sobre R\$ {moeda(valor_imovel)}) = R\$ {moeda(base)}  
-- Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(100)}  
-- **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
+- Sobre o valor do imóvel: (2% sobre R$ {moeda(valor_imovel)}) = R$ {moeda(base)}  
+- Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(100)}  
+- **Total estimado do ITBI:** R$ {moeda(resultado['ITBI'])}
 """
         else:
             itbi_detalhe = "**Detalhamento indisponível para esta cidade.**"
@@ -120,22 +125,22 @@ if st.button("Calcular"):
 
 #### 🏡 Dados do Imóvel e Financiamento
 
-- **Valor de Compra e Venda:** R\$ {moeda(valor_imovel)}
-- **Valor Financiado:** R\$ {moeda(valor_financiado)}
-- **Valor de Entrada:** R\$ {moeda(entrada)}
+- **Valor de Compra e Venda:** R$ {moeda(valor_imovel)}
+- **Valor Financiado:** R$ {moeda(valor_financiado)}
+- **Valor de Entrada:** R$ {moeda(entrada)}
 - **Tipo de Financiamento:** {tipo_financiamento}
 
 #### 💰 Despesas Relacionadas à Compra do Imóvel
 
-**1️⃣ Caixa Econômica Federal – R\$ {moeda(resultado['Lavratura'])}**  
+**1️⃣ Caixa Econômica Federal – R$ {moeda(resultado['Lavratura'])}**  
 Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento. 
 
-**2️⃣ ITBI – Prefeitura – R\$ {moeda(resultado['ITBI'])}**  
+**2️⃣ ITBI – Prefeitura – R$ {moeda(resultado['ITBI'])}**  
 O ITBI pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
 
 {itbi_detalhe}
 
-**3️⃣ Cartório de Registro de Imóveis – R\$ {moeda(resultado['Registro'])}**  
+**3️⃣ Cartório de Registro de Imóveis – R$ {moeda(resultado['Registro'])}**  
 Esse valor refere-se ao registro do contrato de financiamento.
 
 ✅ **Desconto de 50% aplicado?** {'Sim ✅' if primeiro_imovel else 'Não ❌'}
@@ -144,7 +149,7 @@ Esse valor refere-se ao registro do contrato de financiamento.
 
 #### 💵 Total Geral das Despesas
 
-**Total estimado:** R\$ {moeda(resultado['Total Despesas'])}
+**Total estimado:** R$ {moeda(resultado['Total Despesas'])}
 
 ⚠️ *Este cálculo é apenas uma estimativa informativa. Para valores oficiais, consulte os órgãos competentes.*
 """

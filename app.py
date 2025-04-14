@@ -157,8 +157,13 @@ Esse valor refere-se ao registro do contrato de financiamento.
 
         st.markdown(texto)
 
-        texto_whatsapp = limpar_para_whatsapp(texto)
-        botao_whatsapp(texto_whatsapp)
+                # Botão para copiar o resultado
+        copy_code = f"""
+        <textarea id="textoResultado" style="display:none;">{texto}</textarea>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('textoResultado').value)">📋 Copiar para a área de transferência</button>
+        """
+        st.components.v1.html(copy_code, height=50)
+
 
     except Exception as e:
         st.error(f"Erro ao calcular: {e}")

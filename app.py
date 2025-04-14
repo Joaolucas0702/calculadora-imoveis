@@ -144,10 +144,10 @@ Total estimado do ITBI: {moeda(resultado.get('ITBI', 0.0))}
 
 #### 🏡 Dados do Imóvel e Financiamento
 
-- **Valor de Compra e Venda:** {moeda(valor_imovel)}
-- **Valor Financiado:** {moeda(valor_financiado)}
-- **Valor de Entrada:** {moeda(entrada)}
-- **Tipo de Financiamento:** {tipo_financiamento}
+- **Valor de Compra e Venda: {moeda(valor_imovel)}
+- **Valor Financiado: {moeda(valor_financiado)}
+- **Valor de Entrada: {moeda(entrada)}
+- **Tipo de Financiamento: {tipo_financiamento}
 
 #### 💰 Despesas Relacionadas à Compra do Imóvel
 

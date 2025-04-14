@@ -105,7 +105,7 @@ O Imposto sobre Transmissão de Bens Imóveis (ITBI) pode ser cobrado separadame
 3️⃣ *Cartório de Registro de Imóveis – R$ {resultado['Registro']:,.2f}*  
 Esse valor refere-se ao registro do contrato de financiamento, obrigatório para garantir a legalidade da compra e a segurança jurídica do comprador.
 
-✅ Desconto de 50% aplicado? {'(X) Sim' if primeiro_imovel else '( ) Não'}
+✅ Desconto de 50% aplicado? {'(X) Sim' if primeiro_imovel else '(X) Não'}
 
 💡 Desconto: Se for o primeiro imóvel residencial financiado pelo SFH (Sistema Financeiro de Habitação), pode haver um desconto de 50% na taxa de registro.
 

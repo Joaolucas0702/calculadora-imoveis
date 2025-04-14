@@ -1,16 +1,12 @@
 import streamlit as st
 from calculadora import CalculadoraDespesasImoveis
-from xhtml2pdf import pisa
-import io
-import base64
-import urllib.parse
 
 st.set_page_config(page_title="Calculadora de Despesas de Imóveis", layout="centered")
 st.title("🏠 Calculadora de Despesas de Imóveis")
 
 calculadora = CalculadoraDespesasImoveis()
 
-# 🔢 Funções auxiliares
+# 🔢 Funções para lidar com moeda brasileira
 
 def converter_para_float(valor_str):
     try:
@@ -33,24 +29,6 @@ def formatar_moeda_input(valor_str):
 def moeda(valor):
     return f"R$ {valor:,.2f}".replace(",", "v").replace(".", ",").replace("v", ".")
 
-def gerar_pdf_html(html):
-    result = io.BytesIO()
-    pisa.CreatePDF(io.StringIO(html), dest=result)
-    return result.getvalue()
-
-def download_button_pdf(texto_html, nome_arquivo="relatorio.pdf"):
-    pdf_data = gerar_pdf_html(texto_html)
-    b64 = base64.b64encode(pdf_data).decode()
-    href = f'<a href="data:application/pdf;base64,{b64}" download="{nome_arquivo}">📄 Baixar PDF</a>'
-    st.markdown(href, unsafe_allow_html=True)
-
-def botao_whatsapp(mensagem):
-    mensagem_encoded = urllib.parse.quote(mensagem)
-    link = f"https://wa.me/?text={mensagem_encoded}"
-    html_link = f'<a href="{link}" target="_blank">📲 Compartilhar no WhatsApp</a>'
-    st.markdown(html_link, unsafe_allow_html=True)
-
-# Formulário
 st.header("Preencha os dados abaixo:")
 
 col1, col2 = st.columns(2)
@@ -168,15 +146,10 @@ A Suporte Soluções Imobiliárias não é responsável pelo cálculo oficial da
 Para obter informações precisas e realizar os pagamentos, recomenda-se entrar em contato com os órgãos responsáveis, como Prefeitura e o Cartório de Registro de Imóveis.
 """
 
-        texto_html = texto.replace("\n", "<br>")
-        st.markdown(texto)
-
-        download_button_pdf(texto_html, nome_arquivo="calculo_imovel.pdf")
-        botao_whatsapp(texto)
+        st.text_area("Resultado do Cálculo:", value=texto, height=650)
 
     except Exception as e:
         st.error(f"Erro ao calcular: {e}")
-
 
     except Exception as e:
         st.error(f"Erro ao calcular: {e}")

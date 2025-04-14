@@ -1,9 +1,3 @@
-from calculadora_despesas import (
-    calcular_itbi,
-    calcular_lavratura_contrato,
-)
-
-
 def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=False):
     tabela_registro = [
         (625.89, 111),

@@ -59,7 +59,7 @@ def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa
 def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=False):
     def custo(valor):
         for limite, custo in tabela_registro:
-            if valor <= limite:
+            if valor >= limite:
                 return custo
         return tabela_registro[-1][1]
 

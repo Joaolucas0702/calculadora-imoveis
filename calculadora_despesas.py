@@ -49,7 +49,6 @@ def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa
 
 def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=False):
     tabela_registro = [
-        (0.00, 73.22),
         (625.89, 111.00),
         (1251.79, 141.69),
         (2503.58, 205.48),
@@ -70,11 +69,16 @@ def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=F
         (1502146.34, 8610.85),
     ]
 
+    # Adiciona a faixa inicial (de 0 até 625.89)
+    tabela_registro = [(0, 73.22)] + tabela_registro
+
     def custo(valor):
-        for limite, custo_reg in tabela_registro:
-            if valor <= limite:
-                return custo_reg
-        # Se o valor for maior que todos os limites, aplica o último custo
+        for i in range(1, len(tabela_registro)):
+            limite_anterior, _ = tabela_registro[i - 1]
+            limite_atual, custo_atual = tabela_registro[i]
+            if limite_anterior < valor <= limite_atual:
+                return custo_atual
+        # Se for maior que o último limite
         return tabela_registro[-1][1]
 
     custo_imovel = custo(valor_imovel)
@@ -84,12 +88,11 @@ def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=F
     # Soma os R$ 200 fixos fora do desconto
     total += 200
 
-    # Aplica o desconto de 50% apenas na parte original, não no extra
+    # Aplica desconto de 50% apenas sobre os custos principais (não sobre os R$ 200)
     if primeiro_imovel:
         total = (custo_imovel + custo_financiado) * 0.5 + 200
 
     return round(total, 2)
-
 
 
 def calcular_lavratura_contrato(tipo_financiamento, valor_financiado):

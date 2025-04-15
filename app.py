@@ -59,7 +59,12 @@ seguro = converter_para_float(seguro_str)
 with col2:
     tipo_financiamento = st.selectbox("Tipo de Financiamento", ["SBPE", "Minha Casa Minha Vida", "Pro Cotista"])
     cidade = st.selectbox("Cidade", ["Goiânia", "Trindade", "Senador Canedo", "Aparecida de Goiânia"])
-    renda_bruta = st.number_input("Renda Bruta (R$) (se for Aparecida de Goiânia)", min_value=0.0, value=0.0, step=100.0, format="%.2f")
+    if cidade == "Aparecida de Goiânia":
+    renda_bruta = st.number_input("Renda Bruta (R$)", min_value=0.0, value=0.0, step=100.0, format="%.2f")
+else:
+    renda_bruta = 0.0  # ou None, se preferir
+    st.info("O campo de Renda Bruta só é necessário para Aparecida de Goiânia.")
+
     primeiro_imovel = st.checkbox("É o primeiro imóvel financiado?", value=True)
 
 if st.button("Calcular"):

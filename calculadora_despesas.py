@@ -50,17 +50,17 @@ def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa
 def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=False):
     # Cada tupla representa: (limite superior da faixa, custo correspondente)
     tabela_registro = [
-        (625.89, 111.00),
-        (1251.79, 141.69),
-        (2503.58, 205.48),
-        (5007.15, 403.86),
-        (10014.30, 432.19),
-        (15021.47, 550.29),
-        (25035.77, 696.73),
-        (37553.65, 923.45),
-        (50071.55, 1098.21),
-        (62589.43, 1539.87),
-        (100143.09, 2314.53),
+        (625.89, 73.22),
+        (1251.79, 111.00),
+        (2503.58, 141.69),
+        (5007.15, 205.48),
+        (10014.30, 403.86),
+        (15021.47, 432.19),
+        (25035.77, 550.29),
+        (37553.65, 696.73),
+        (50071.55, 923.45),
+        (62589.43, 1098.21),
+        (100143.09, 1539.87),
         (150214.64, 2314.53),
         (250357.73, 3117.53),
         (375536.58, 4092.94),
@@ -68,7 +68,7 @@ def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=F
         (751073.17, 5788.70),
         (1126609.75, 6936.52),
         (1502146.34, 8065.44),
-        (float('inf'), 8610.85),  # qualquer valor acima do último limite
+        (float('inf'), 8810.65),
     ]
 
     def custo(valor):

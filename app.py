@@ -59,12 +59,13 @@ seguro = converter_para_float(seguro_str)
 with col2:
     tipo_financiamento = st.selectbox("Tipo de Financiamento", ["SBPE", "Minha Casa Minha Vida", "Pro Cotista"])
     cidade = st.selectbox("Cidade", ["Goiânia", "Trindade", "Senador Canedo", "Aparecida de Goiânia"])
+    
     if cidade == "Aparecida de Goiânia":
-    renda_bruta = st.number_input("Renda Bruta (R$)", min_value=0.0, value=0.0, step=100.0, format="%.2f")
-else:
-    renda_bruta = 0.0  # ou None, se preferir
-    st.info("O campo de Renda Bruta só é necessário para Aparecida de Goiânia.")
-
+        renda_bruta = st.number_input("Renda Bruta (R$)", min_value=0.0, value=0.0, step=100.0, format="%.2f")
+    else:
+        renda_bruta = 0.0
+        st.info("O campo de Renda Bruta só é necessário para Aparecida de Goiânia.")
+    
     primeiro_imovel = st.checkbox("É o primeiro imóvel financiado?", value=True)
 
 if st.button("Calcular"):
@@ -137,33 +138,33 @@ if st.button("Calcular"):
             itbi_detalhe = "**Detalhamento indisponível para esta cidade.**"
 
         texto = f"""
-### 📟 CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO
+ 📟 CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO
 
-#### 🏡 Dados do Imóvel e Financiamento
+ 🏡 Dados do Imóvel e Financiamento
 
 - **Valor de Compra e Venda:** R\$ {moeda(valor_imovel)}
 - **Valor Financiado:** R\$ {moeda(valor_financiado)}
 - **Valor de Entrada:** R\$ {moeda(entrada)}
 - **Tipo de Financiamento:** {tipo_financiamento}
 
-#### 💰 Despesas Relacionadas à Compra do Imóvel
+ 💰 Despesas Relacionadas à Compra do Imóvel
 
-**1️⃣ Caixa Econômica Federal – R\$ {moeda(resultado['Lavratura'])}**  
+*1️⃣ Caixa Econômica Federal – R\$ {moeda(resultado['Lavratura'])}*
 Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento. 
 
-**2️⃣ ITBI – Prefeitura – R\$ {moeda(resultado['ITBI'])}**  
+*2️⃣ ITBI – Prefeitura – R\$ {moeda(resultado['ITBI'])}* 
 O ITBI pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
 
 {itbi_detalhe}
 
-**3️⃣ Cartório de Registro de Imóveis – R\$ {moeda(resultado['Registro'])}**  
+*3️⃣ Cartório de Registro de Imóveis – R\$ {moeda(resultado['Registro'])}* 
 Esse valor refere-se ao registro do contrato de financiamento.
 
 ✅ **Desconto de 50% aplicado?** {'Sim ✅' if primeiro_imovel else 'Não ❌'}
 
 💡 *Obs.: Se for o primeiro imóvel residencial financiado pelo SFH, pode haver um desconto de 50% na taxa de registro.*
 
-#### 💵 Total Geral das Despesas
+ 💵 Total Geral das Despesas
 
 **Total estimado:** R\$ {moeda(resultado['Total Despesas'])}
 
@@ -171,7 +172,8 @@ Esse valor refere-se ao registro do contrato de financiamento.
 """
 
         st.markdown(texto)
-         # Botão estilizado para copiar o resultado
+
+        # Botão estilizado para copiar o resultado
         copy_code = f"""
         <style>
         .copiar-btn {{

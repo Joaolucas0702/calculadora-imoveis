@@ -18,7 +18,6 @@ def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa
         itbi = itbi_entrada + itbi_financiado
 
     elif cidade == "Senador Canedo - GO":
-        # Definir alíquota com base no valor financiado
         if valor_financiado <= 500000:
             aliquota_financiado = 0.005
         elif valor_financiado <= 1000000:
@@ -30,7 +29,6 @@ def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa
 
         itbi_financiado = valor_financiado * aliquota_financiado
         itbi_entrada = entrada * 0.02
-
         itbi = itbi_entrada + itbi_financiado
         taxa_expediente = 8.50
 
@@ -47,7 +45,6 @@ def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa
         taxa_expediente = 0
 
     return itbi + taxa_expediente
-
 
 
 def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=False):
@@ -81,17 +78,16 @@ def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=F
                 break
         return faixa_valida
 
-   custo_imovel = custo(valor_imovel)
-custo_financiado = custo(valor_financiado)
-total = custo_imovel + custo_financiado
+    custo_imovel = custo(valor_imovel)
+    custo_financiado = custo(valor_financiado)
+    total = custo_imovel + custo_financiado
 
-# Soma os R$ 200 fixos fora do desconto
-total += 200
+    # Soma os R$ 200 fixos fora do desconto
+    total += 200
 
-# Aplica o desconto de 50% apenas na parte do custo original, não no extra
-if primeiro_imovel:
-    total = (custo_imovel + custo_financiado) * 0.5 + 200
-
+    # Aplica o desconto de 50% apenas na parte do custo original, não no extra
+    if primeiro_imovel:
+        total = (custo_imovel + custo_financiado) * 0.5 + 200
 
     return round(total, 2)
 
@@ -104,9 +100,6 @@ def calcular_lavratura_contrato(tipo_financiamento, valor_financiado):
     else:
         return 0
 
-    # Aplica o desconto de 50% apenas na parte do custo original, não no extra
-    if primeiro_imovel:
-        total = (custo_imovel + custo_financiado) * 0.5 + 200
 
     return round(total, 2)
 

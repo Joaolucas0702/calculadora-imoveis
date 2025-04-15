@@ -48,7 +48,6 @@ def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa
 
 
 def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=False):
-    # Cada tupla representa: (limite superior da faixa, custo correspondente)
     tabela_registro = [
         (625.89, 73.22),
         (1251.79, 111.00),
@@ -72,19 +71,19 @@ def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=F
     ]
 
     def custo(valor):
-        for limite, custo_faixa in tabela_registro:
+        for limite, custo_reg in tabela_registro:
             if valor <= limite:
-                return custo_faixa
-        return tabela_registro[-1][1]  # fallback (não deveria chegar aqui)
+                return custo_reg
+        return 0
 
     custo_imovel = custo(valor_imovel)
     custo_financiado = custo(valor_financiado)
     total = custo_imovel + custo_financiado
 
-    # R$ 200 fixos fora do desconto
+    # Soma fixa
     total += 200
 
-    # Aplica 50% de desconto sobre os custos principais se for o primeiro imóvel
+    # Desconto de 50% (apenas nos valores da tabela, não nos 200 extras)
     if primeiro_imovel:
         total = (custo_imovel + custo_financiado) * 0.5 + 200
 

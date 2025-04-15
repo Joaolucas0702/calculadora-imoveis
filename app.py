@@ -162,7 +162,7 @@ Esse valor refere-se ao registro da compra/venda do imóvel e alienação fiduci
 
 ✅ **Desconto de 50% aplicado?** {'Sim ✅' if primeiro_imovel else 'Não ❌'}
 
-💡 *Obs.: Se for o primeiro imóvel residencial financiado pelo SFH, pode haver um desconto de 50% nas custas de registro.*
+💡 **Obs.:** *Se for o primeiro imóvel residencial financiado pelo SFH, pode haver um desconto de 50% nas custas de registro.*
 
  💵 **Total Geral das Despesas**
 

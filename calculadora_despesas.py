@@ -72,7 +72,7 @@ def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=F
     def custo(valor):
         faixa_valida = 0
         for limite, custo_reg in tabela_registro:
-            if valor >= limite:
+            if valor <= limite:
                 faixa_valida = custo_reg
             else:
                 break

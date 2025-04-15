@@ -49,7 +49,8 @@ def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa
 
 def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=False):
     tabela_registro = [
-        (625.89, 111),
+        (0.00, 73.22),
+        (625.89, 111.00),
         (1251.79, 141.69),
         (2503.58, 205.48),
         (5007.15, 403.86),

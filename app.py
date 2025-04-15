@@ -138,35 +138,35 @@ if st.button("Calcular"):
             itbi_detalhe = "**Detalhamento indisponível para esta cidade.**"
 
         texto = f"""
- 📟 CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO
+ 📟 **CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO**
 
- 🏡 Dados do Imóvel e Financiamento
+ 🏡 **Dados do Imóvel e Financiamento**
 
-- **Valor de Compra e Venda:** R\$ {moeda(valor_imovel)}
-- **Valor Financiado:** R\$ {moeda(valor_financiado)}
-- **Valor de Entrada:** R\$ {moeda(entrada)}
+- **Valor de Compra e Venda:**  {moeda(valor_imovel)}
+- **Valor Financiado:**  {moeda(valor_financiado)}
+- **Valor de Entrada:**  {moeda(entrada)}
 - **Tipo de Financiamento:** {tipo_financiamento}
 
- 💰 Despesas Relacionadas à Compra do Imóvel
+ 💰 **Despesas Relacionadas à Compra do Imóvel**
 
-*1️⃣ Caixa Econômica Federal – R\$ {moeda(resultado['Lavratura'])}*
+1️⃣ **Caixa Econômica Federal – {moeda(resultado['Lavratura'])}**
 Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento. 
 
-*2️⃣ ITBI – Prefeitura – R\$ {moeda(resultado['ITBI'])}* 
+2️⃣ **ITBI – Prefeitura – {moeda(resultado['ITBI'])}** 
 O ITBI pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
 
 {itbi_detalhe}
 
-*3️⃣ Cartório de Registro de Imóveis – R\$ {moeda(resultado['Registro'])}* 
-Esse valor refere-se ao registro do contrato de financiamento.
+3️⃣ **Cartório de Registro de Imóveis – {moeda(resultado['Registro'])}** 
+Esse valor refere-se ao registro da compra/venda do imóvel e alienação fiduciaria 
 
 ✅ **Desconto de 50% aplicado?** {'Sim ✅' if primeiro_imovel else 'Não ❌'}
 
-💡 *Obs.: Se for o primeiro imóvel residencial financiado pelo SFH, pode haver um desconto de 50% na taxa de registro.*
+💡 *Obs.: Se for o primeiro imóvel residencial financiado pelo SFH, pode haver um desconto de 50% nas custas de registro.*
 
- 💵 Total Geral das Despesas
+ 💵 **Total Geral das Despesas**
 
-**Total estimado:** R\$ {moeda(resultado['Total Despesas'])}
+**Total  geral estimado:** {moeda(resultado['Total Despesas'])}
 
 ⚠️ *Este cálculo é apenas uma estimativa informativa. Para valores oficiais, consulte os órgãos competentes.*
 """

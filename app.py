@@ -58,19 +58,19 @@ seguro = converter_para_float(seguro_str)
 
 with col2:
     tipo_financiamento = st.selectbox("Tipo de Financiamento", ["SBPE", "Minha Casa Minha Vida", "Pro Cotista"])
-    cidade = st.selectbox("Cidade", ["Goiânia", "Trindade", "Senador Canedo", "Aparecida de Goiânia"])
+    cidade = st.selectbox("Cidade", ["Goiânia - GO", "Trindade - GO", "Senador Canedo - GO", "Aparecida de Goiânia - GO"])
     
     if cidade == "Aparecida de Goiânia":
         renda_bruta = st.number_input("Renda Bruta (R$)", min_value=0.0, value=0.0, step=100.0, format="%.2f")
     else:
         renda_bruta = 0.0
-        st.info("O campo de Renda Bruta só é necessário para Aparecida de Goiânia.")
+        st.info("O campo de Renda Bruta só é necessário para Aparecida de Goiânia - GO.")
     
     primeiro_imovel = st.checkbox("É o primeiro imóvel financiado?", value=True)
 
 if st.button("Calcular"):
     try:
-        if cidade == "Aparecida de Goiânia":
+        if cidade == "Aparecida de Goiânia - GO":
             resultado = calculadora.calcular_aparecida(
                 valor_imovel, valor_financiado, tipo_financiamento, renda_bruta, seguro, primeiro_imovel
             )
@@ -81,7 +81,7 @@ if st.button("Calcular"):
 
         entrada = valor_imovel - valor_financiado
 
-        if cidade == "Aparecida de Goiânia":
+        if cidade == "Aparecida de Goiânia - GO":
             itbi_entrada = entrada * 0.025
             if renda_bruta <= 4400:
                 aliq = 0.5
@@ -97,14 +97,14 @@ if st.button("Calcular"):
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(taxa_exp)}  
 - **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
 """
-        elif cidade == "Senador Canedo":
+        elif cidade == "Senador Canedo - GO":
             itbi_detalhe = f"""
 - Sobre o valor da entrada: (2,5% sobre R\$ {moeda(entrada)}) = R\$ {moeda(entrada * 0.015)}  
 - Sobre o valor financiado: (0,5% sobre R\$ {moeda(valor_financiado)}) = {moeda(valor_financiado * 0.005)}  
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(8.50)}  
 - **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
 """
-        elif cidade == "Trindade":
+        elif cidade == "Trindade - GO":
             entrada = valor_imovel - valor_financiado
 
             if valor_financiado <= 500000:
@@ -127,7 +127,7 @@ if st.button("Calcular"):
 - **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
 """
 
-        elif cidade == "Goiânia":
+        elif cidade == "Goiânia - GO":
             base = valor_imovel * 0.02
             itbi_detalhe = f"""
 - Sobre o valor do imóvel: (2% sobre R\$ {moeda(valor_imovel)}) = {moeda(base)}  

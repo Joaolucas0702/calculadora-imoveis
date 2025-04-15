@@ -48,6 +48,7 @@ def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa
 
 
 def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=False):
+    # Cada tupla representa: (limite superior da faixa, custo correspondente)
     tabela_registro = [
         (625.89, 111.00),
         (1251.79, 141.69),
@@ -60,35 +61,30 @@ def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=F
         (50071.55, 1098.21),
         (62589.43, 1539.87),
         (100143.09, 2314.53),
-        (150214.64, 3117.53),
-        (250357.73, 4092.94),
-        (375536.58, 4822.74),
-        (500715.44, 5788.70),
-        (751073.17, 6936.52),
-        (1126609.75, 8065.44),
-        (1502146.34, 8610.85),
+        (150214.64, 2314.53),
+        (250357.73, 3117.53),
+        (375536.58, 4092.94),
+        (500715.44, 4822.74),
+        (751073.17, 5788.70),
+        (1126609.75, 6936.52),
+        (1502146.34, 8065.44),
+        (float('inf'), 8610.85),  # qualquer valor acima do último limite
     ]
 
-    # Adiciona a faixa inicial (de 0 até 625.89)
-    tabela_registro = [(0, 73.22)] + tabela_registro
-
     def custo(valor):
-        for i in range(1, len(tabela_registro)):
-            limite_anterior, _ = tabela_registro[i - 1]
-            limite_atual, custo_atual = tabela_registro[i]
-            if limite_anterior < valor <= limite_atual:
-                return custo_atual
-        # Se for maior que o último limite
-        return tabela_registro[-1][1]
+        for limite, custo_faixa in tabela_registro:
+            if valor <= limite:
+                return custo_faixa
+        return tabela_registro[-1][1]  # fallback (não deveria chegar aqui)
 
     custo_imovel = custo(valor_imovel)
     custo_financiado = custo(valor_financiado)
     total = custo_imovel + custo_financiado
 
-    # Soma os R$ 200 fixos fora do desconto
+    # R$ 200 fixos fora do desconto
     total += 200
 
-    # Aplica desconto de 50% apenas sobre os custos principais (não sobre os R$ 200)
+    # Aplica 50% de desconto sobre os custos principais se for o primeiro imóvel
     if primeiro_imovel:
         total = (custo_imovel + custo_financiado) * 0.5 + 200
 

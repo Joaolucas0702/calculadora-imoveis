@@ -81,12 +81,17 @@ def calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel=F
                 break
         return faixa_valida
 
-    custo_imovel = custo(valor_imovel)
-    custo_financiado = custo(valor_financiado)
-    total = custo_imovel + custo_financiado
+   custo_imovel = custo(valor_imovel)
+custo_financiado = custo(valor_financiado)
+total = custo_imovel + custo_financiado
 
-    if primeiro_imovel:
-        total *= 0.5
+# Soma os R$ 200 fixos fora do desconto
+total += 200
+
+# Aplica o desconto de 50% apenas na parte do custo original, não no extra
+if primeiro_imovel:
+    total = (custo_imovel + custo_financiado) * 0.5 + 200
+
 
     return round(total, 2)
 

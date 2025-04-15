@@ -2,8 +2,8 @@ import streamlit as st
 from calculadora import CalculadoraDespesasImoveis
 import urllib.parse
 
-st.set_page_config(page_title="Calculadora de Despesas de Imóveis", layout="centered")
-st.title("🏠 Calculadora de Despesas de Imóveis")
+st.set_page_config(page_title="Calculadora de Despesas", layout="centered")
+st.title("🏠 Calculadora de Despesas")
 
 calculadora = CalculadoraDespesasImoveis()
 

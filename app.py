@@ -72,8 +72,9 @@ if st.button("Calcular"):
     try:
         if cidade == "Aparecida de Goiânia - GO":
             resultado = calculadora.calcular_aparecida(
-                valor_imovel, valor_financiado, tipo_financiamento, renda_bruta, seguro, primeiro_imovel
+                valor_imovel, valor_financiado, tipo_financiamento, renda_bruta, seguro, primeiro_imovel, cidade
             )
+
         else:
             resultado = calculadora.calcular_goiania_trindade_canedo(
                 valor_imovel, valor_financiado, tipo_financiamento, cidade, seguro, primeiro_imovel

@@ -3,10 +3,20 @@ from calculadora import CalculadoraDespesasImoveis
 import urllib.parse
 
 st.set_page_config(page_title="Calculadora de Despesas", layout="centered")
+
+# 👉 Aqui é onde você vai inserir o logotipo:
+st.markdown(
+    """
+    <div style='text-align: center; margin-bottom: 20px;'>
+        <img src='logo.png' width='300'>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("🏠 Calculadora de Despesas")
 
 calculadora = CalculadoraDespesasImoveis()
-
 # 🔢 Funções auxiliares
 def converter_para_float(valor_str):
     try:

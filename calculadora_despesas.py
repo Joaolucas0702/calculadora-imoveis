@@ -1,7 +1,7 @@
 def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa_expediente_padrao=100):
     entrada = valor_imovel - valor_financiado
 
-    if cidade == "Aparecida de Goiânia - GO":
+    if cidade == "Aparecida de Goiânia":
         taxa_expediente = 30
         itbi_entrada = entrada * 0.025
 
@@ -17,7 +17,7 @@ def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa
 
         itbi = itbi_entrada + itbi_financiado
 
-    elif cidade == "Senador Canedo - GO":
+    elif cidade == "Senador Canedo":
         if valor_financiado <= 500000:
             aliquota_financiado = 0.005
         elif valor_financiado <= 1000000:
@@ -32,11 +32,11 @@ def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa
         itbi = itbi_entrada + itbi_financiado
         taxa_expediente = 8.50
 
-    elif cidade == "Trindade - GO":
+    elif cidade == "Trindade":
         itbi = valor_imovel * 0.02
         taxa_expediente = 4.50
 
-    elif cidade == "Goiânia - GO":
+    elif cidade == "Goiânia":
         itbi = valor_imovel * 0.02
         taxa_expediente = taxa_expediente_padrao
 

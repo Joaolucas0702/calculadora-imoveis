@@ -1,18 +1,18 @@
 import streamlit as st
-from calculadora import CalculadoraDespesasImoveis
-import urllib.parse
+from pathlib import Path
 
+# Configurações da página
 st.set_page_config(page_title="Calculadora de Despesas", layout="centered")
 
-# 👉 Aqui é onde você vai inserir o logotipo:
-st.markdown(
-    """
-    <div style='text-align: center; margin-bottom: 20px;'>
-        <img src='logo.png' width='300'>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# Caminho para o arquivo de logo
+logo_path = Path("logo.png")  # Ajuste o caminho se necessário
+
+# Verifica se o arquivo existe e exibe a imagem
+if logo_path.exists():
+    st.image(str(logo_path), width=300)
+else:
+    st.warning("Logo não encontrada!")
+
 
 st.title("🏠 Calculadora de Despesas")
 

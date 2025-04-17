@@ -95,7 +95,7 @@ if st.button("Calcular"):
 - Sobre o valor da entrada: (2,5% sobre R\$ {moeda(entrada)}) = R\$ {moeda(itbi_entrada)}  
 - Sobre o valor financiado: ({aliq}% sobre R\$ {moeda(valor_financiado)}) = {moeda(itbi_fin)}  
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(taxa_exp)}  
-- **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
+- **Total estimado do ITBI:** {moeda(resultado['ITBI'])}
 """
         elif cidade == "Senador Canedo":
             itbi_detalhe = f"""

@@ -22,7 +22,8 @@ class CalculadoraDespesasImoveis:
 
     def calcular_aparecida(self, valor_imovel, valor_financiado, tipo_financiamento, renda_bruta, seguro, primeiro_imovel):
         entrada = valor_imovel - valor_financiado
-        itbi = calcular_itbi("Aparecida de Goiânia", valor_imovel, valor_financiado, renda_bruta)
+        cidade = "Aparecida de Goiânia - GO"  # ✅ Corrigido aqui
+        itbi = calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta)
         lavratura = calcular_lavratura_contrato(tipo_financiamento, valor_financiado)
         registro = calcular_registro_cartorio(valor_imovel, valor_financiado, primeiro_imovel)
         total_despesas = itbi + lavratura + registro + seguro
@@ -34,4 +35,3 @@ class CalculadoraDespesasImoveis:
             "Seguro (conferir na simulação)": seguro,
             "Total Despesas": total_despesas
         }
-

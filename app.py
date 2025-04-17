@@ -2,8 +2,8 @@ import streamlit as st
 from calculadora import CalculadoraDespesasImoveis
 import urllib.parse
 
-st.set_page_config(page_title="Calculadora de Despesas", layout="centered")
-st.title("🏠 Calculadora de Despesas")
+st.set_page_config(page_title="Calculadora de Despesas de Imóveis", layout="centered")
+st.title("🏠 Calculadora de Despesas de Imóveis")
 
 calculadora = CalculadoraDespesasImoveis()
 
@@ -58,19 +58,19 @@ seguro = converter_para_float(seguro_str)
 
 with col2:
     tipo_financiamento = st.selectbox("Tipo de Financiamento", ["SBPE", "Minha Casa Minha Vida", "Pro Cotista"])
-    cidade = st.selectbox("Cidade", ["Goiânia - GO", "Trindade - GO", "Senador Canedo - GO", "Aparecida de Goiânia - GO"])
+    cidade = st.selectbox("Cidade", ["Goiânia", "Trindade", "Senador Canedo", "Aparecida de Goiânia"])
     
     if cidade == "Aparecida de Goiânia":
         renda_bruta = st.number_input("Renda Bruta (R$)", min_value=0.0, value=0.0, step=100.0, format="%.2f")
     else:
         renda_bruta = 0.0
-        st.info("O campo de Renda Bruta só é necessário para Aparecida de Goiânia - GO.")
+        st.info("O campo de Renda Bruta só é necessário para Aparecida de Goiânia.")
     
     primeiro_imovel = st.checkbox("É o primeiro imóvel financiado?", value=True)
 
 if st.button("Calcular"):
     try:
-        if cidade == "Aparecida de Goiânia - GO":
+        if cidade == "Aparecida de Goiânia":
             resultado = calculadora.calcular_aparecida(
                 valor_imovel, valor_financiado, tipo_financiamento, renda_bruta, seguro, primeiro_imovel
             )
@@ -81,7 +81,7 @@ if st.button("Calcular"):
 
         entrada = valor_imovel - valor_financiado
 
-        if cidade == "Aparecida de Goiânia - GO":
+        if cidade == "Aparecida de Goiânia":
             itbi_entrada = entrada * 0.025
             if renda_bruta <= 4400:
                 aliq = 0.5
@@ -97,14 +97,14 @@ if st.button("Calcular"):
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(taxa_exp)}  
 - **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
 """
-        elif cidade == "Senador Canedo - GO":
+        elif cidade == "Senador Canedo":
             itbi_detalhe = f"""
 - Sobre o valor da entrada: (2,5% sobre R\$ {moeda(entrada)}) = R\$ {moeda(entrada * 0.015)}  
 - Sobre o valor financiado: (0,5% sobre R\$ {moeda(valor_financiado)}) = {moeda(valor_financiado * 0.005)}  
 - Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(8.50)}  
 - **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
 """
-        elif cidade == "Trindade - GO":
+        elif cidade == "Trindade":
             entrada = valor_imovel - valor_financiado
 
             if valor_financiado <= 500000:
@@ -127,7 +127,7 @@ if st.button("Calcular"):
 - **Total estimado do ITBI:** R\$ {moeda(resultado['ITBI'])}
 """
 
-        elif cidade == "Goiânia - GO":
+        elif cidade == "Goiânia":
             base = valor_imovel * 0.02
             itbi_detalhe = f"""
 - Sobre o valor do imóvel: (2% sobre R\$ {moeda(valor_imovel)}) = {moeda(base)}  
@@ -138,41 +138,37 @@ if st.button("Calcular"):
             itbi_detalhe = "**Detalhamento indisponível para esta cidade.**"
 
         texto = f"""
- 📟 **CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO**
+### 📟 CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO
 
- 🏡 **Dados do Imóvel e Financiamento**
+#### 🏡 Dados do Imóvel e Financiamento
 
-- **Valor de Compra e Venda:**  {moeda(valor_imovel)}
-- **Valor Financiado:**  {moeda(valor_financiado)}
-- **Valor de Entrada:**  {moeda(entrada)}
+- **Valor de Compra e Venda:** R\$ {moeda(valor_imovel)}
+- **Valor Financiado:** R\$ {moeda(valor_financiado)}
+- **Valor de Entrada:** R\$ {moeda(entrada)}
 - **Tipo de Financiamento:** {tipo_financiamento}
 
- 💰 **Despesas Relacionadas à Compra do Imóvel**
+#### 💰 Despesas Relacionadas à Compra do Imóvel
 
-1️⃣ **Caixa Econômica Federal – {moeda(resultado['Lavratura'])}**
+**1️⃣ Caixa Econômica Federal – R\$ {moeda(resultado['Lavratura'])}**  
 Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento. 
 
-2️⃣ **ITBI – Prefeitura – {moeda(resultado['ITBI'])}** 
+**2️⃣ ITBI – Prefeitura – R\$ {moeda(resultado['ITBI'])}**  
 O ITBI pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
 
 {itbi_detalhe}
 
-3️⃣ **Cartório de Registro de Imóveis – {moeda(resultado['Registro'])}** 
-Esse valor refere-se ao registro da compra/venda do imóvel e alienação fiduciaria 
+**3️⃣ Cartório de Registro de Imóveis – R\$ {moeda(resultado['Registro'])}**  
+Esse valor refere-se ao registro do contrato de financiamento.
 
 ✅ **Desconto de 50% aplicado?** {'Sim ✅' if primeiro_imovel else 'Não ❌'}
 
-💡 **Obs.:** *Se for o primeiro imóvel residencial financiado pelo SFH, pode haver um desconto de 50% nas custas de registro.*
+💡 *Obs.: Se for o primeiro imóvel residencial financiado pelo SFH, pode haver um desconto de 50% na taxa de registro.*
 
- 💵 **Total Geral das Despesas**
+#### 💵 Total Geral das Despesas
 
-**Total  geral estimado:** {moeda(resultado['Total Despesas'])}
+**Total estimado:** R\$ {moeda(resultado['Total Despesas'])}
 
-⚠️ **Aviso Importante:**
-
-*A Suporte Soluções Imobiliárias não é responsável pelo cálculo oficial das despesas relacionadas à compra do imóvel. O presente levantamento tem caráter informativo e visa apenas auxiliar o cliente a entender os custos envolvidos na aquisição, com base em valores estimados.*
-
-*Para obter informações precisas e realizar os pagamentos, recomenda-se entrar em contato com os órgãos responsáveis, como Prefeitura e o Cartório de Registro de Imóveis.*
+⚠️ *Este cálculo é apenas uma estimativa informativa. Para valores oficiais, consulte os órgãos competentes.*
 """
 
         st.markdown(texto)
@@ -203,6 +199,10 @@ Esse valor refere-se ao registro da compra/venda do imóvel e alienação fiduci
         <button class="copiar-btn" onclick="navigator.clipboard.writeText(document.getElementById('textoResultado').value)">📋 Copiar para a área de transferência</button>
         """
         st.components.v1.html(copy_code, height=80)
+
+    except Exception as e:
+        st.error(f"Erro ao calcular: {e}")
+
 
     except Exception as e:
         st.error(f"Erro ao calcular: {e}")

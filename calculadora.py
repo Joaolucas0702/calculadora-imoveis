@@ -20,7 +20,7 @@ class CalculadoraDespesasImoveis:
             "Total Despesas": total_despesas
         }
 
-    def calcular_aparecida(self, valor_imovel, valor_financiado, tipo_financiamento, renda_bruta, seguro, primeiro_imovel):
+    def calcular_aparecida(self, valor_imovel, valor_financiado, tipo_financiamento, renda_bruta, seguro, primeiro_imovel, cidade):
         entrada = valor_imovel - valor_financiado
         itbi = calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta)
         lavratura = calcular_lavratura_contrato(tipo_financiamento, valor_financiado)

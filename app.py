@@ -13,6 +13,7 @@ if logo_path.exists():
 else:
     st.warning("Logo não encontrada!")
 
+from calculadora import CalculadoraDespesasImoveis
 
 st.title("🏠 Calculadora de Despesas")
 

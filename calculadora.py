@@ -35,3 +35,4 @@ class CalculadoraDespesasImoveis:
             "Seguro (conferir na simulação)": seguro,
             "Total Despesas": total_despesas
         }
+

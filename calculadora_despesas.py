@@ -33,8 +33,10 @@ def calcular_itbi(cidade, valor_imovel, valor_financiado, renda_bruta=None, taxa
         taxa_expediente = 8.50
 
     elif cidade == "Trindade - GO":
-        itbi = valor_imovel * 0.02
+        itbi_entrada = valor_entrada * 0.02
+        itbi_financiado = valor_financiado * 0.005
         taxa_expediente = 4.50
+        itbi = itbi_entrada + itbi_financiado + taxa_expediente
 
     elif cidade == "Goiânia - GO":
         itbi = valor_imovel * 0.02

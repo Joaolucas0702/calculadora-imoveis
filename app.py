@@ -162,15 +162,22 @@ if st.button("Calcular"):
  💰 **Despesas Relacionadas à Compra do Imóvel**
 
 1️⃣ **Caixa Econômica Federal – {moeda(resultado['Lavratura'])}**
+
 Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento. 
 
 2️⃣ **ITBI – Prefeitura – {moeda(resultado['ITBI'])}** 
+
 O ITBI pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
+
+Obs.: Caso a avaliação do imóvel feita pela Prefeitura fique maior do que o valor de compra e venda esse valor sofrerá alteração.
 
 {itbi_detalhe}
 
 3️⃣ **Cartório de Registro de Imóveis – {moeda(resultado['Registro'])}** 
+
 Esse valor refere-se ao registro da compra/venda do imóvel e alienação fiduciaria 
+
+Obs.: Este cálculo foi feito pelo valor de compra e venda e valor de financiamento, caso a avaliação feita pela Prefeitura fique maior ou o imóvel tenha mais de uma matrícula, esse cálculo sofrerá alteração.
 
 ✅ **Desconto de 50% aplicado?** {'Sim ✅' if primeiro_imovel else 'Não ❌'}
 

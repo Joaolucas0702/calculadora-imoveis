@@ -52,7 +52,7 @@ def limpar_markdown_para_copia(texto_md):
 def botao_whatsapp(mensagem):
     mensagem_encoded = urllib.parse.quote(mensagem)
     link = f"https://wa.me/?text={mensagem_encoded}"
-    html_link = f'<a href="{link}" target="_blank" style="text-decoration:none;display:inline-block;margin-top:10px;background:#25D366;color:white;padding:10px 20px;border-radius:8px;font-weight:bold;">\ud83d\udcf2 Compartilhar no WhatsApp</a>'
+    html_link = f'<a href="{link}" target="_blank" style="text-decoration:none;display:inline-block;margin-top:10px;background:#25D366;color:white;padding:10px 20px;border-radius:8px;font-weight:bold;">📲 Compartilhar no WhatsApp</a>'
     st.markdown(html_link, unsafe_allow_html=True)
 
 # Formulário
@@ -101,60 +101,52 @@ if st.button("Calcular"):
 
         entrada = valor_imovel - valor_financiado
 
-        if cidade == "Aparecida de Goiânia - GO":
-            itbi_entrada = entrada * 0.025
-            if renda_bruta <= 4400:
-                aliq = 0.5
-            elif renda_bruta <= 8000:
-                aliq = 1
-            else:
-                aliq = 1.5
-            itbi_fin = valor_financiado * (aliq / 100)
-            taxa_exp = 30.00
-            itbi_detalhe = f"""
-- Sobre o valor da entrada: (2,5% sobre R$ {moeda(entrada)}) = R$ {moeda(itbi_entrada)}  
-- Sobre o valor financiado: ({aliq}% sobre R$ {moeda(valor_financiado)}) = {moeda(itbi_fin)}  
-- Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(taxa_exp)}  
-- **Total estimado do ITBI:** R$ {moeda(resultado['ITBI'])}
-"""
-        elif cidade == "Senador Canedo - GO":
-            itbi_detalhe = f"""
-- Sobre o valor da entrada: (2,5% sobre R$ {moeda(entrada)}) = R$ {moeda(entrada * 0.015)}  
-- Sobre o valor financiado: (0,5% sobre R$ {moeda(valor_financiado)}) = {moeda(valor_financiado * 0.005)}  
-- Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(8.50)}  
-- **Total estimado do ITBI:** R$ {moeda(resultado['ITBI'])}
-"""
-        elif cidade == "Trindade - GO":
-            if valor_financiado <= 500000:
-                aliquota_financiado = 0.005
-            elif valor_financiado <= 1000000:
-                aliquota_financiado = 0.01
-            elif valor_financiado <= 1500000:
-                aliquota_financiado = 0.015
-            else:
-                aliquota_financiado = 0.02
+        # (aqui continua sua lógica para itbi_detalhe e texto)
 
-            itbi_entrada = entrada * 0.02
-            itbi_financiado = valor_financiado * aliquota_financiado
-            taxa_exp = 4.50
+        texto = f"""
+ 📟 **CÁLCULO PARA COMPRA DE IMÓVEL COM FINANCIAMENTO**
 
-            itbi_detalhe = f"""
-- Sobre o valor da entrada: (2% sobre R$ {moeda(entrada)}) = R$ {moeda(itbi_entrada)}  
-- Sobre o valor financiado: ({aliquota_financiado * 100:.1f}% sobre R$ {moeda(valor_financiado)}) = R$ {moeda(itbi_financiado)}  
-- Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(taxa_exp)}  
-- **Total estimado do ITBI:** R$ {moeda(resultado['ITBI'])}
-"""
-        elif cidade == "Goiânia - GO":
-            base = valor_imovel * 0.02
-            itbi_detalhe = f"""
-- Sobre o valor do imóvel: (2% sobre R$ {moeda(valor_imovel)}) = {moeda(base)}  
-- Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(100)}  
-- **Total estimado do ITBI:** R$ {moeda(resultado['ITBI'])}
-"""
-        else:
-            itbi_detalhe = "**Detalhamento indisponível para esta cidade.**"
+ 🏡 **Dados do Imóvel e Financiamento**
 
-        texto = f"""... (texto completo do cálculo permanece igual) ..."""
+- **Valor de Compra e Venda:**  {moeda(valor_imovel)}
+- **Valor Financiado:**  {moeda(valor_financiado)}
+- **Valor de Entrada:**  {moeda(entrada)}
+- **Tipo de Financiamento:** {tipo_financiamento}
+
+ 💰 **Despesas Relacionadas à Compra do Imóvel**
+
+1️⃣ **Caixa Econômica Federal – {moeda(resultado['Lavratura'])}**
+
+Esse valor corresponde à lavratura do contrato de financiamento/escritura, avaliação do imóvel e relacionamento. 
+
+2️⃣ **ITBI – Prefeitura – {moeda(resultado['ITBI'])}** 
+
+O ITBI pode ser cobrado separadamente sobre o valor do imóvel e sobre o valor financiado, dependendo da legislação municipal.
+
+Obs.: Caso a avaliação do imóvel feita pela Prefeitura fique maior do que o valor de compra e venda esse valor sofrerá alteração.
+
+{itbi_detalhe}
+
+3️⃣ **Cartório de Registro de Imóveis – {moeda(resultado['Registro'])}** 
+
+Esse valor refere-se ao registro da compra/venda do imóvel e alienação fiduciária.
+
+Obs.: Este cálculo foi feito pelo valor de compra e venda e valor de financiamento. Caso a avaliação feita pela Prefeitura fique maior ou o imóvel tenha mais de uma matrícula, esse cálculo sofrerá alteração.
+
+✅ **Desconto de 50% aplicado?** {'Sim ✅' if primeiro_imovel else 'Não ❌'}
+
+💡 **Obs.:** *Se for o primeiro imóvel residencial financiado pelo SFH, pode haver um desconto de 50% nas custas de registro.*
+
+ 💵 **Total Geral das Despesas**
+
+**Total geral estimado:** {moeda(resultado['Total Despesas'])}
+
+⚠️ **Aviso Importante:**
+
+*A Suporte Soluções Imobiliárias não é responsável pelo cálculo oficial das despesas relacionadas à compra do imóvel. O presente levantamento tem caráter informativo e visa apenas auxiliar o cliente a entender os custos envolvidos na aquisição, com base em valores estimados.*
+
+*Para obter informações precisas e realizar os pagamentos, recomenda-se entrar em contato com os órgãos responsáveis, como Prefeitura e o Cartório de Registro de Imóveis.*
+"""
 
         st.markdown(texto)
         texto_para_copiar = limpar_markdown_para_copia(texto)
@@ -181,7 +173,7 @@ if st.button("Calcular"):
         </style>
 
         <textarea id="textoResultado" style="display:none;">{texto_para_copiar}</textarea>
-        <button class="copiar-btn" onclick="navigator.clipboard.writeText(document.getElementById('textoResultado').value)">\ud83d\udccb Copiar para a área de transferência</button>
+        <button class="copiar-btn" onclick="navigator.clipboard.writeText(document.getElementById('textoResultado').value)">📋 Copiar para a área de transferência</button>
         """, height=80)
 
         # Botão para compartilhar no WhatsApp

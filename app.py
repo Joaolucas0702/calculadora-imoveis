@@ -125,10 +125,10 @@ if st.button("Calcular"):
             taxa_expediente = 8.50
 
             itbi_detalhe = f"""
-- Sobre o valor de entrada (2% sobre R$ {moeda(entrada)}): R$ {moeda(itbi_entrada)}
-- Sobre o valor financiado ({aliquota_financiado*100:.2f}% sobre R$ {moeda(valor_financiado)}): R$ {moeda(itbi_financiado)}
-- Taxa de Expediente da avaliação do ITBI (se aplicável): R$ {moeda(taxa_expediente)}
-- **Total estimado do ITBI:** R$ {moeda(itbi + taxa_expediente)}
+- Sobre o valor de entrada (2% sobre R\$ {moeda(entrada)}): R\$ {moeda(itbi_entrada)}
+- Sobre o valor financiado ({aliquota_financiado*100:.2f}% sobre R\$ {moeda(valor_financiado)}): R\$ {moeda(itbi_financiado)}
+- Taxa de Expediente da avaliação do ITBI (se aplicável): R\$ {moeda(taxa_expediente)}
+- **Total estimado do ITBI:** R\$ {moeda(itbi + taxa_expediente)}
 """
 
         elif cidade == "Trindade - GO":
